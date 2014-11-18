@@ -1,0 +1,84 @@
+<Task>
+    <Reference>
+        <Description>
+            <brief>Find edges</brief>
+        </Description>
+    </Reference>
+    <Subtasks>
+        <Subtask name="main">
+
+            <Executor name="Loader" period="0.5">
+                <Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
+                    <param name="sequence.directory">%[TASK_LOCATION]%/../data/</param>
+                    <param name="sequence.pattern">.*\.jpg</param>
+                    <param name="mode.loop">1</param>
+                </Component>
+
+				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="4">
+            		<param name="type">CV_RGB2GRAY</param>
+            	</Component>
+            </Executor>
+
+            <Executor name="Processor" period="0.5">
+
+            	<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="1">
+            		<param name="kernel.width">3</param>
+					<param name="kernel.height">3</param>
+					<param name="sigma.x">2</param>
+					<param name="sigma.y">2</param>
+            	</Component>
+
+		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="2">
+		        </Component>
+		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="3">
+		        </Component>
+
+		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="4">
+                    <param name="threshold">60</param>
+		        </Component>
+
+		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="5">
+		        </Component>
+            </Executor>
+
+            <Executor name="Displayer" period="0.5">
+                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
+                    <param name="count">1</param>
+                    <param name="title">lines</param>
+                </Component>
+
+            </Executor>
+        </Subtask>
+    </Subtasks>
+
+    <DataStreams>
+        <Source name="Source.out_img">
+
+        	<sink>Conv2gray.in_img</sink>
+        	<sink>DrawEdges.in_img</sink>
+        	<sink>DrawLines.in_img</sink>
+        </Source>
+
+        <Source name="Conv2gray.out_img">
+        	<sink>GaussianBlur.in_img</sink>
+
+        </Source>
+        <Source name="GaussianBlur.out_img">
+        	<sink>FindEdges.in_img</sink>
+        </Source>
+        <Source name="FindEdges.out_edges">
+        	<sink>DrawEdges.in_edges</sink>
+        </Source>
+        <Source name="DrawEdges.out_img">
+            <sink>Lines.in_img</sink>
+        </Source>
+        <Source name="Lines.out_linesDrawable">
+            <sink>DrawLines.in_lines</sink>
+        </Source>
+        <Source name="DrawLines.out_img">
+            <sink>Displayer.in_img</sink>
+        </Source>
+
+
+    </DataStreams>
+</Task>

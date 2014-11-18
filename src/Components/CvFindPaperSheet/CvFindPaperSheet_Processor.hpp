@@ -1,0 +1,116 @@
+/*!
+ * \file CvFindPaperSheet_Processor.hpp
+ * \brief Circles grid localization component.
+ * \date Apr 29, 2014
+ * \author lzmuda
+ */
+
+#ifndef CVFINDPaperSheet_PROCESSOR_HPP_
+#define CVFINDPaperSheet_PROCESSOR_HPP_
+
+#include <boost/shared_ptr.hpp>
+#include "Component_Aux.hpp"
+#include "Types/Objects3D/GridPattern.hpp"
+#include "Types/ImagePosition.hpp"
+#include "Types/Drawable.hpp"
+#include "Timer.hpp"
+#include "Property.hpp"
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+namespace Processors {
+namespace CvFindPaperSheet {
+
+using namespace cv;
+
+
+#define ELEMS BOOST_PP_TUPLE_TO_LIST(5, (NEAREST, LINEAR, AREA, CUBIC, LANCZOS4))
+GENERATE_ENUM_TRANSLATOR(InterpolationTranslator, int, ELEMS, INTER_);
+
+class CvFindPaperSheet_Processor: public Base::Component
+{
+public:
+    CvFindPaperSheet_Processor(const std::string & name = "");
+    virtual ~CvFindPaperSheet_Processor();
+
+	/*!
+	 * Prepares communication interface.
+	 */
+	virtual void prepareInterface();
+
+
+protected:
+	/*!
+	 * Method called when component is started
+	 * \return true on success
+	 */
+	virtual bool onStart();
+
+	/*!
+	 * Method called when component is stopped
+	 * \return true on success
+	 */
+	virtual bool onStop();
+
+	/*!
+	 * Method called when component is initialized
+	 * \return true on success
+	 */
+	virtual bool onInit();
+
+	/*!
+	 * Method called when component is finished
+	 * \return true on success
+	 */
+	virtual bool onFinish();
+
+	/*!
+	 * Method called when step is called
+	 * \return true on success
+	 */
+	virtual bool onStep();
+
+
+private:
+	void onNewImage();
+
+	void initGridPattern();
+
+
+	/// Input image stream.
+	Base::DataStreamIn <cv::Mat> in_img;
+
+	/// Output grid pattern.
+	Base::DataStreamOut <Types::Objects3D::GridPattern> out_gridPattern;
+
+	/// Output image position.
+	Base::DataStreamOut <Types::ImagePosition> out_imagePosition;
+
+	Base::DataStreamOut <cv::Mat> out_img;
+
+	/// Located points.
+	std::vector<cv::Point2f> gridPoints;
+
+	Common::Timer timer;
+
+	boost::shared_ptr<Types::Objects3D::GridPattern> gridPattern;
+
+	cv::Mat sub_img;
+
+	Base::Property<int> prop_width;
+	Base::Property<int> prop_height;
+	Base::Property<float> prop_size;
+	Base::Property<bool> prop_inverse;
+	Base::Property<int, InterpolationTranslator> prop_interpolation_type;
+
+	void sizeCallback(int old_value, int new_value);
+};
+
+} // namespace CvFindPaperSheet {
+
+} // namespace Processors {
+
+REGISTER_COMPONENT("CvFindPaperSheet", Processors::CvFindPaperSheet::CvFindPaperSheet_Processor)
+
+#endif /* CVFINDPaperSheet_PROCESSOR_HPP_ */
