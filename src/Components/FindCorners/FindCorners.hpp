@@ -70,10 +70,8 @@ protected:
 
 	// Input data streams
 	Base::DataStreamIn< vector<cv::Vec4i> > in_lines;
-	Base::DataStreamIn<cv::Mat> in_img;
 
 	// Output data streams
-	Base::DataStreamOut<cv::Mat> out_img;
 	Base::DataStreamOut<Types::Objects3D::GridPattern> out_gridPattern;
 	Base::DataStreamOut<Types::ImagePosition> out_imagePosition;
 

@@ -16,8 +16,8 @@ namespace Processors {
 namespace FindCorners {
 
 FindCorners::FindCorners(const std::string & name) :
-		Base::Component(name) , 
-		prop_width("prop_width", 9), 
+		Base::Component(name) ,
+		prop_width("prop_width", 9),
 		prop_height("prop_height", 6) {
 	registerProperty(prop_width);
 	registerProperty(prop_height);
@@ -30,8 +30,6 @@ FindCorners::~FindCorners() {
 void FindCorners::prepareInterface() {
 	// Register data streams, events and event handlers HERE!
 	registerStream("in_lines", &in_lines);
-	registerStream("in_img", &in_img);
-	registerStream("out_img", &out_img);
 	registerStream("out_gridPattern", &out_gridPattern);
 	registerStream("out_imagePosition", &out_imagePosition);
 	// Register handlers

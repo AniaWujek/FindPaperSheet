@@ -90,9 +90,24 @@ void CvHoughLines_Processor::onNewImage()
 		return;
 	}
 
+
+
 	Types::DrawableContainer c;
 	vector<Vec4i> lines;
 	cv::HoughLinesP( image, lines, 1, CV_PI/180, threshold, minLineLength, maxLineGap);
+
+	while(lines.size() != 4){
+        if(lines.size() > 4) {
+            threshold = threshold + 1;
+        }
+        else {
+            threshold = threshold - 1;
+        }
+        lines.clear();
+        cv::HoughLinesP( image, lines, 1, CV_PI/180, threshold, minLineLength, maxLineGap);
+        std::cout<<"thresh: "<<threshold<<std::endl;
+	}
+
 	CLOG(LDEBUG) << "Found " << lines.size() << " lines";
 	// Needed for visualization only
     for (int i = 0; i < lines.size(); i++)
