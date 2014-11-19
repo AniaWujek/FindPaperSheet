@@ -94,6 +94,15 @@ void CvHoughLines_Processor::onNewImage()
 	vector<Vec4i> lines;
 	cv::HoughLinesP( image, lines, 1, CV_PI/180, threshold, minLineLength, maxLineGap);
 	CLOG(LDEBUG) << "Found " << lines.size() << " lines";
+	// Needed for visualization only
+    for (int i = 0; i < lines.size(); i++)
+    {
+        cv::Vec4i v = lines[i];
+        lines[i][0] = 0;
+        lines[i][1] = ((float)v[1] - v[3]) / (v[0] - v[2]) * -v[0] + v[1];
+        lines[i][2] = image.cols;
+        lines[i][3] = ((float)v[1] - v[3]) / (v[0] - v[2]) * (image.cols - v[2]) + v[3];
+    }
 	for( size_t i = 0; i < lines.size(); i++ )
 	{
 		c.add(new Types::Line(cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3])));
