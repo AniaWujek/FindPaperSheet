@@ -39,12 +39,32 @@
 
 		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="5">
 		        </Component>
+
+                <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="6">
+		        </Component>
+
+		        <Component name="DrawCorners" type="EdgeDetection:DrawCorners" priority="6">
+		        </Component>
+
+		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="7">
+                    <param name="width">10</param>
+                    <param name="height">20</param>
+		        </Component>
+
+		        <Coponent name="SolvePnP" type="CvBasic:CvSolvePnp" priority="8">
+		        </Component>
+
+		        <Component name="DrawCoordinateSystem" type="CvBasic:DrawCooordinateSystem" priority="9">
+		        </Component>
+
+
+
             </Executor>
 
             <Executor name="Displayer" period="0.5">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">1</param>
-                    <param name="title">lines</param>
+                    <param name="count">2</param>
+                    <param name="title">lines, corners</param>
                 </Component>
 
             </Executor>
@@ -56,6 +76,7 @@
         	<sink>Conv2gray.in_img</sink>
         	<sink>DrawEdges.in_img</sink>
         	<sink>DrawLines.in_img</sink>
+        	<sink>DrawCorners.in_img</sink>
         </Source>
 
         <Source name="Conv2gray.out_img">
@@ -74,8 +95,17 @@
         <Source name="Lines.out_linesDrawable">
             <sink>DrawLines.in_lines</sink>
         </Source>
+        <Source name="Lines.out_lines">
+            <sink>FindCorners.in_lines</sink>
+        </Source>
+        <Source name="FindCorners.out_corners">
+            <sink>DrawCorners.in_corners</sink>
+        </Source>
         <Source name="DrawLines.out_img">
-            <sink>Displayer.in_img</sink>
+            <sink>Displayer.in_img0</sink>
+        </Source>
+        <Source name="DrawCorners.out_img">
+            <sink>Displayer.in_img1</sink>
         </Source>
 
 

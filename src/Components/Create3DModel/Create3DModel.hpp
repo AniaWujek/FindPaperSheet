@@ -4,38 +4,39 @@
  * \author Anna Wujek
  */
 
-#ifndef FINDCORNERS_HPP_
-#define FINDCORNERS_HPP_
+#ifndef CREATE3DMODEL_HPP_
+#define CREATE3DMODEL_HPP_
 
 #include "Component_Aux.hpp"
 #include "Component.hpp"
 #include "DataStream.hpp"
 #include "Property.hpp"
 #include "EventHandler2.hpp"
+#include "Types/Objects3D/Object3D.hpp"
 
 #include <opencv2/opencv.hpp>
 
 
 namespace Processors {
-namespace FindCorners {
+namespace Create3DModel {
 
 /*!
- * \class FindCorners
- * \brief FindCorners processor class.
+ * \class Create3DModel
+ * \brief Create3DModel processor class.
  *
  *
  */
-class FindCorners: public Base::Component {
+class Create3DModel: public Base::Component {
 public:
 	/*!
 	 * Constructor.
 	 */
-	FindCorners(const std::string & name = "FindCorners");
+	Create3DModel(const std::string & name = "Create3DModel");
 
 	/*!
 	 * Destructor
 	 */
-	virtual ~FindCorners();
+	virtual ~Create3DModel();
 
 	/*!
 	 * Prepare components interface (register streams and handlers).
@@ -68,28 +69,36 @@ protected:
 
 
 	// Input data streams
-	Base::DataStreamIn< std::vector<cv::Vec4i> > in_lines;
+	Base::DataStreamIn< std::vector<cv::Point2f> > in_corners;
 
 	// Output data streams
-	Base::DataStreamOut< std::vector<cv::Point2f> > out_corners;
+	Base::DataStreamOut<Types::Objects3D::Object3D> out_Model;
 
 	// Handlers
-	Base::EventHandler2 h_FindIntersection;
+	Base::EventHandler2 h_OnNewImage;
 
 	// Properties
+	Base::Property<int> width;
+	Base::Property<int> height;
 
+
+    boost::shared_ptr<Types::Objects3D::Object3D> gridPattern;
+    std::vector<cv::Point2f> gridPoints;
+
+    void initGridPattern();
+    void sizeCallback(int old_value, int new_value);
 
 	// Handlers
-	void FindIntersection();
+	void OnNewImage();
 
 };
 
-} //: namespace FindCorners
+} //: namespace Create3DModel
 } //: namespace Processors
 
 /*
  * Register processor component.
  */
-REGISTER_COMPONENT("FindCorners", Processors::FindCorners::FindCorners)
+REGISTER_COMPONENT("Create3DModel", Processors::Create3DModel::Create3DModel)
 
-#endif /* FINDCORNERS_HPP_ */
+#endif /* CREATE3DMODEL_HPP_ */
