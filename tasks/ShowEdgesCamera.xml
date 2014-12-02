@@ -1,0 +1,76 @@
+<Task>
+    <Reference>
+        <Description>
+            <brief>Find edges</brief>
+        </Description>
+    </Reference>
+    <Subtasks>
+        <Subtask name="main">    
+                
+            <Executor name="Loader" period="0.5">
+                <Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
+					<param name="camera_serial">13481977</param>
+					<param name="width">1296</param>
+					<param name="height">1032</param>
+					<param name="shutter_mode">manual</param>
+					<param name="shutter_value">80</param>
+					<param name="gain_mode">manual</param>
+					<param name="gain_value">2</param>
+					<param name="frame_rate_value">10</param>
+					<param name="frame_rate_mode">manual</param>
+				</Component>
+                <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
+					<param name="width">1296</param>
+					<param name="height">1032</param>
+					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
+					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
+				</Component>
+				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3" bump="0">
+				</Component>    
+				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="4">
+            		<param name="type">CV_RGB2GRAY</param>
+            	</Component>            
+            </Executor>
+            
+            <Executor>
+		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="1">            
+		        </Component>
+		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="1">            
+		        </Component>
+            </Executor>           
+            
+            <Executor name="Displayer" period="0.5">
+                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
+                    <param name="count">2</param>
+                    <param name="title">original, edges</param>                    
+                </Component>
+                
+            </Executor>
+        </Subtask>
+    </Subtasks>
+    
+    <DataStreams>
+        <source name="Source.out_img">
+        	<sink>Undistort.in_img</sink>
+        	<sink>Displayer.in_img0</sink>
+        </source>
+        <source name="CameraInfo.out_camera_info">
+        	<sink>Undistort.in_camera_info</sink>
+        </source>
+        <source name="Undistort.out_img">
+        	<sink>Conv2gray.in_img</sink>
+        	<sink>DrawEdges.in_img</sink>
+        </source>
+        <source name="Conv2gray.out_img">
+        	<sink>FindEdges.in_img</sink>
+        </source>
+        <source name="FindEdges.out_edges">
+        	<sink>DrawEdges.in_edges</sink>
+        </source>
+        <source name="DrawEdges.out_img">
+        	<sink>Displayer.in_img1</sink>
+        </source>
+        
+        
+    </DataStreams>
+</Task>
