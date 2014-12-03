@@ -66,6 +66,13 @@ cv::Point2f computeIntersect(cv::Vec4i a, cv::Vec4i b) {
     }
 }
 
+struct myComp {
+    bool operator() (cv::Point2f a, cv::Point2f b) {
+        if(abs(a.x - b.x) > 10) return a.x < b.x;
+        else return a.y < b.y;
+    }
+} myComp;
+
 void FindCorners::FindIntersection() {
     std::vector<cv::Point2f> corners;
     std::vector<cv::Vec4i> lines = in_lines.read();
@@ -78,6 +85,8 @@ void FindCorners::FindIntersection() {
             }
         }
     }
+    std::sort(corners.begin(), corners.end(), myComp);
+
 
     out_corners.write(corners);
 }

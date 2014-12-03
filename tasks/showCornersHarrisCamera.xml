@@ -7,7 +7,7 @@
     <Subtasks>
         <Subtask name="main">
 
-            <Executor name="Loader" period="0.4">
+            <Executor name="Loader" period="0.5">
                 <Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
 					<param name="camera_serial">13481977</param>
 					<param name="width">1296</param>
@@ -59,28 +59,18 @@
 		        </Component>
 		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="5">
 		        </Component>
-		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="6">
-                    <param name="threshold">60</param>
-		        </Component>
-		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="7">
+		        <Component name="CvHarris" type="CvBasic:CvHarris" priority="6">
 		        </Component>
 
-		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="8">
+		        <Component name="DrawHarris" type="EdgeDetection:DrawHarris" priority="7">
 		        </Component>
-
-		        <Component name="DrawCorners" type="EdgeDetection:DrawCorners" priority="9">
-		        </Component>
-
-
-
-
 
             </Executor>
 
             <Executor name="Displayer" period="0.5">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">3</param>
-                    <param name="title">thresh, lines, ori</param>
+                    <param name="count">2</param>
+                    <param name="title">ori, harris</param>
                 </Component>
 
             </Executor>
@@ -96,23 +86,18 @@
         </Source>
         <Source name="Undistort.out_img">
             <sink>Conv2gray.in_img</sink>
-            <sink>DrawCorners.in_img</sink>
+
         </Source>
         <Source name="Thresholding.out_img">
-            <sink>Morphology1.in_img</sink>
-        </Source>
-        <Source name="Morphology1.out_img">
-            <sink>Morphology2.in_img</sink>
-        </Source>
-        <Source name="Morphology2.out_img">
-            <sink>GaussianBlur.in_img</sink>
+            <sink>DrawHarris.in_img</sink>
+            <sink>CvHarris.in_img</sink>
+            <sink>Displayer.in_img0</sink>
         	<sink>DrawEdges.in_img</sink>
-        	<sink>DrawLines.in_img</sink>
-        	<sink>Displayer.in_img0</sink>
-
         </Source>
         <Source name="Conv2gray.out_img">
         	<sink>Thresholding.in_img</sink>
+
+
         </Source>
         <Source name="GaussianBlur.out_img">
         	<sink>FindEdges.in_img</sink>
@@ -120,23 +105,17 @@
         <Source name="FindEdges.out_edges">
         	<sink>DrawEdges.in_edges</sink>
         </Source>
-        <Source name="DrawEdges.out_img">
-            <sink>Lines.in_img</sink>
+
+
+        <Source name="CvHarris.out_features">
+            <sink>DrawHarris.in_features</sink>
         </Source>
-        <Source name="Lines.out_linesDrawable">
-            <sink>DrawLines.in_lines</sink>
-        </Source>
-        <Source name="DrawLines.out_img">
+        <Source name="DrawHarris.out_img">
             <sink>Displayer.in_img1</sink>
         </Source>
-        <Source name="Lines.out_lines">
-            <sink>FindCorners.in_lines</sink>
-        </Source>
-        <Source name="FindCorners.out_corners">
-            <sink>DrawCorners.in_corners</sink>
-        </Source>
-        <Source name="DrawCorners.out_img">
-            <sink>Displayer.in_img2</sink>
-        </Source>
+
+
+
+
     </DataStreams>
 </Task>

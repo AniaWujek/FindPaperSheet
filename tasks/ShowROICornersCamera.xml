@@ -71,16 +71,14 @@
 		        <Component name="DrawCorners" type="EdgeDetection:DrawCorners" priority="9">
 		        </Component>
 
-
-
-
-
+		        <Component name="ROI" type="FindPaperSheet:ROI" priority="10">
+		        </Component>
             </Executor>
 
             <Executor name="Displayer" period="0.5">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">3</param>
-                    <param name="title">thresh, lines, ori</param>
+                    <param name="count">6</param>
+                    <param name="title">o1,o2,o3,o4,ori, thresh</param>
                 </Component>
 
             </Executor>
@@ -97,9 +95,12 @@
         <Source name="Undistort.out_img">
             <sink>Conv2gray.in_img</sink>
             <sink>DrawCorners.in_img</sink>
+            <sink>ROI.in_img</sink>
+
         </Source>
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
+
         </Source>
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
@@ -108,8 +109,7 @@
             <sink>GaussianBlur.in_img</sink>
         	<sink>DrawEdges.in_img</sink>
         	<sink>DrawLines.in_img</sink>
-        	<sink>Displayer.in_img0</sink>
-
+        	<sink>Displayer.in_img5</sink>
         </Source>
         <Source name="Conv2gray.out_img">
         	<sink>Thresholding.in_img</sink>
@@ -126,17 +126,28 @@
         <Source name="Lines.out_linesDrawable">
             <sink>DrawLines.in_lines</sink>
         </Source>
-        <Source name="DrawLines.out_img">
-            <sink>Displayer.in_img1</sink>
-        </Source>
         <Source name="Lines.out_lines">
             <sink>FindCorners.in_lines</sink>
         </Source>
         <Source name="FindCorners.out_corners">
             <sink>DrawCorners.in_corners</sink>
+            <sink>ROI.in_corners</sink>
         </Source>
         <Source name="DrawCorners.out_img">
+            <sink>Displayer.in_img4</sink>
+        </Source>
+        <Source name="ROI.out_corner1">
+            <sink>Displayer.in_img0</sink>
+        </Source>
+        <Source name="ROI.out_corner2">
+            <sink>Displayer.in_img1</sink>
+        </Source>
+        <Source name="ROI.out_corner3">
             <sink>Displayer.in_img2</sink>
         </Source>
+        <Source name="ROI.out_corner4">
+            <sink>Displayer.in_img3</sink>
+        </Source>
+
     </DataStreams>
 </Task>
