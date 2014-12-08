@@ -19,6 +19,12 @@ using namespace cv;
 namespace Processors {
 namespace CvHoughLines {
 
+struct lineParams {
+        bool pozioma;
+        bool pionowa;
+        float A,
+        float b;
+	} LineParams;
 /*!
  * \class CvHoughLines_Processor
  * \brief CvHoughLines processor class.
@@ -37,6 +43,8 @@ public:
 	virtual ~CvHoughLines_Processor();
 
 	void prepareInterface();
+
+
 
 protected:
 

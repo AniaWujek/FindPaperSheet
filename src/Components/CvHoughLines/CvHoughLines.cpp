@@ -79,23 +79,43 @@ bool CvHoughLines_Processor::onStart()
 }
 
 bool sameLines(Vec4i line1, Vec4i line2) {
-    float A1 = float(line1[3] - line1[1]) / float(line1[2] - line1[0]);
-    float b1 = line1[1] - A1 * line1[0];
-    float A2 = float(line2[3] - line2[1]) / float(line2[2] - line2[0]);
-    float b2 = line2[1] - A2 * line2[0];
+    float A1, A2, b1, b2, Yaxis1, Xaxis1, Yaxis2, Xaxis2, angle1, angle2;
 
-    float Yaxis1 = b1;
-    float Xaxis1 = -b1 / A1;
+    float len1 = sqrt(float(line1[2] - line1[0])*float(line1[2] - line1[0]) + float(line1[3] - line1[1])*float(line1[3] - line1[1]));
+    std::cout<<"len: "<<len1<<endl;
+    if(abs(float(line1[2] - line1[0])) < 0.01 * len1) {
+        //linia 1 pionowa
+        angle1 = 90.0;
+        Yaxis1 = 0.0;
+        Xaxis1 = (line1[0] + line1[2]) / 2.0;
+    }
+    else {
+        A1 = float(line1[3] - line1[1]) / float(line1[2] - line1[0]);
+        b1 = line1[1] - A1 * line1[0];
 
-    float Yaxis2 = b2;
-    float Xaxis2 = -b2 / A2;
+        Yaxis1 = b1;
+        Xaxis1 = -b1 / A1;
 
+        angle1 = atan2(float(line1[3] - line1[1]) , float(line1[2] - line1[0]))*180.0 / M_PI;
+    }
+    float len2 = sqrt(float(line2[2] - line2[0])*float(line2[2] - line2[0]) + float(line2[3] - line2[1])*float(line2[3] - line2[1]));
+    if(abs(float(line2[2] - line2[0])) < 0.001 * len2) {
+        //linia 2 pionowa
+        angle2 = 90.0;
+        Yaxis2 = 0.0;
+        Xaxis2 = (line2[0] + line2[2]) / 2.0;
+    }
+    else {
+        A2 = float(line2[3] - line2[1]) / float(line2[2] - line2[0]);
+        b2 = line2[1] - A2 * line2[0];
 
+        Yaxis2 = b2;
+        Xaxis2 = -b2 / A2;
 
-    float angle1 = atan2(float(line1[3] - line1[1]) , float(line1[2] - line1[0]));
-    float angle2 = atan2(float(line2[3] - line2[1]) , float(line2[2] - line2[0]));
+        angle2 = atan2(float(line2[3] - line2[1]) , float(line2[2] - line2[0]))*180.0 / M_PI;
+    }
 
-    float diffA = abs(angle1 - angle2)*180.0 / M_PI;
+    float diffA = abs(angle1 - angle2);
 
     cout<<diffA<<"\t"<<A2<<"\t"<<b1<<"\t"<<b2<<endl;
     if(diffA < 5.0 && (abs(Yaxis1 - Yaxis2) < 100 || abs(Xaxis1 - Xaxis2) < 100)) {
@@ -106,6 +126,9 @@ bool sameLines(Vec4i line1, Vec4i line2) {
 
 vector<Vec4i> checkDuplicate(vector<Vec4i> & lines) {
     vector<Vec4i> newLines;
+
+    //podzial linii na kategorie
+
 
     for( size_t i = 0; i < lines.size(); i++ )
 	{
