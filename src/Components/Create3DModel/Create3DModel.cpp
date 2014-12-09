@@ -17,8 +17,15 @@ namespace Create3DModel {
 
 Create3DModel::Create3DModel(const std::string & name) :
 		Base::Component(name) ,
-		width("width", 10),
-		height("height", 20) {
+		width("width", 20, "range"),
+		height("height", 30, "range") {
+
+    width.addConstraint("1");
+    width.addConstraint("1000");
+
+    height.addConstraint("1");
+    height.addConstraint("1000");
+
 	registerProperty(width);
 	registerProperty(height);
 
@@ -33,17 +40,34 @@ Create3DModel::~Create3DModel() {
 void Create3DModel::prepareInterface() {
 	// Register data streams, events and event handlers HERE!
 	registerStream("in_corners", &in_corners);
-	registerStream("out_Model", &out_Model);
+	registerStream("out_model", &out_model);
 	// Register handlers
-	h_OnNewImage.setup(boost::bind(&Create3DModel::OnNewImage, this));
-	registerHandler("OnNewImage", &h_OnNewImage);
-	addDependency("OnNewImage", &in_corners);
+	h_createModel.setup(boost::bind(&Create3DModel::createModel, this));
+	registerHandler("createModel", &h_createModel);
+	addDependency("createModel", &in_corners);
 
 }
 
 bool Create3DModel::onInit() {
-
+    initModel();
 	return true;
+}
+
+void Create3DModel::initModel() {
+    sheet = boost::shared_ptr<Types::Objects3D::Object3D>(new Types::Objects3D::Object3D());
+
+    std::vector<cv::Point3f> modelPoints;
+
+    modelPoints.push_back(cv::Point3f(0,0,0));
+    modelPoints.push_back(cv::Point3f(width,0,0));
+    modelPoints.push_back(cv::Point3f(0,height,0));
+    modelPoints.push_back(cv::Point3f(width,height,0));
+
+    sheet->setModelPoints(modelPoints);
+}
+
+void Create3DModel::sizeCallback(int old_val, int new_val) {
+    initModel();
 }
 
 bool Create3DModel::onFinish() {
@@ -55,44 +79,14 @@ bool Create3DModel::onStop() {
 }
 
 bool Create3DModel::onStart() {
-    vector <cv::Point3f> modelPoints;
-
-    gridPattern = boost::shared_ptr <Types::Objects3D::Object3D>(new Types::Objects3D::Object3D());
-
-    modelPoints.push_back(cv::Point3f(0,0,0));
-    modelPoints.push_back(cv::Point3f(float(width),0,0));
-    modelPoints.push_back(cv::Point3f(float(width),float(height),0));
-    modelPoints.push_back(cv::Point3f(0,float(height),0));
-
-	// Set model points.
-	gridPattern->setModelPoints(modelPoints);
 	return true;
 }
 
-void Create3DModel::initGridPattern() {
-    vector <cv::Point3f> modelPoints;
-
-    gridPattern = boost::shared_ptr <Types::Objects3D::Object3D>(new Types::Objects3D::Object3D());
-
-    modelPoints.push_back(cv::Point3f(0,0,0));
-    modelPoints.push_back(cv::Point3f(float(width),0,0));
-    modelPoints.push_back(cv::Point3f(float(width),float(height),0));
-    modelPoints.push_back(cv::Point3f(0,float(height),0));
-
-	// Set model points.
-	gridPattern->setModelPoints(modelPoints);
-}
-
-void Create3DModel::sizeCallback(int old_value, int new_value) {
-	initGridPattern();
-}
-
-void Create3DModel::OnNewImage() {
+void Create3DModel::createModel() {
 
     std::vector<cv::Point2f> corners = in_corners.read();
-
-    gridPattern->setImagePoints(corners);
-    out_Model.write(*gridPattern);
+    sheet->setImagePoints(corners);
+    out_model.write(*sheet);
 }
 
 

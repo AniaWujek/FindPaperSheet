@@ -6,11 +6,11 @@ ADD_COMPONENT(CvHoughLines)
 
 ADD_COMPONENT(FindCorners)
 
-ADD_COMPONENT(Create3DModel)
-
 ADD_COMPONENT(ROI)
 
 
 ADD_COMPONENT(CvHarris)
 
 ADD_COMPONENT(ImprovedCorners)
+
+ADD_COMPONENT(Create3DModel)

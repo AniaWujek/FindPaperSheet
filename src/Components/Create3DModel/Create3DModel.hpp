@@ -67,29 +67,27 @@ protected:
 	 */
 	bool onStop();
 
+	boost::shared_ptr<Types::Objects3D::Object3D> sheet;
+
 
 	// Input data streams
-	Base::DataStreamIn< std::vector<cv::Point2f> > in_corners;
+	Base::DataStreamIn<std::vector<cv::Point2f> > in_corners;
 
 	// Output data streams
-	Base::DataStreamOut<Types::Objects3D::Object3D> out_Model;
+	Base::DataStreamOut<Types::Objects3D::Object3D> out_model;
 
 	// Handlers
-	Base::EventHandler2 h_OnNewImage;
+	Base::EventHandler2 h_createModel;
 
 	// Properties
-	Base::Property<int> width;
-	Base::Property<int> height;
+	Base::Property<float> width;
+	Base::Property<float> height;
 
-
-    boost::shared_ptr<Types::Objects3D::Object3D> gridPattern;
-    std::vector<cv::Point2f> gridPoints;
-
-    void initGridPattern();
     void sizeCallback(int old_value, int new_value);
+    void initModel();
 
 	// Handlers
-	void OnNewImage();
+	void createModel();
 
 };
 

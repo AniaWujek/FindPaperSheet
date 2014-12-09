@@ -17,7 +17,7 @@ namespace ImprovedCorners {
 
 ImprovedCorners::ImprovedCorners(const std::string & name) :
 		Base::Component(name) ,
-		blockSize("blockSize", 3),
+		blockSize("blockSize", 5),
 		apertureSize("apertureSize", 3),
 		k("k", 0.04),
 		thresh("thresh", 254, "range"),
@@ -121,7 +121,7 @@ void ImprovedCorners::improveCorners() {
     std::vector<cv::Point2f> better_corners;
     for(int i = 0; i < rois.size(); ++i) {
         std::vector<cv::Point2f> temp;
-        goodFeaturesToTrack(rois[i], temp, 1, qualityLevel, 10, cv::Mat(), blockSize, false, k);
+        goodFeaturesToTrack(rois[i], temp, 2, qualityLevel, 10, cv::Mat(), blockSize, false, k);
         temp[0].x+=x[i];
         temp[0].y+=y[i];
         better_corners.push_back(temp[0]);
