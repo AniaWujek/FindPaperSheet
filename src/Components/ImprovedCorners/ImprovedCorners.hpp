@@ -69,16 +69,22 @@ protected:
 
 	// Input data streams
 	Base::DataStreamIn<cv::Mat> in_img;
-	Base::DataStreamIn<std::vector<cv::Point2f>> in_corners;
+	Base::DataStreamIn<std::vector<cv::Point2f> > in_corners;
 
 	// Output data streams
-	Base::DataStreamOut<std::vector<cv::Point2f>> out_corners;
+	Base::DataStreamOut<std::vector<cv::Point2f> > out_corners;
 
 	// Handlers
 	Base::EventHandler2 h_improveCorners;
 
 	// Properties
-	Base::Property<float> size;
+	/// Detector parameters
+	Base::Property<int> blockSize;
+	Base::Property<int> apertureSize;
+	Base::Property<double> k;
+	Base::Property<int> thresh;
+	Base::Property<int> roiSize;
+	Base::Property<float> qualityLevel;
 
 
 	// Handlers

@@ -22,7 +22,7 @@ namespace CvHoughLines {
 struct lineParams {
         bool pozioma;
         bool pionowa;
-        float A,
+        float A;
         float b;
 	} LineParams;
 /*!

@@ -82,7 +82,6 @@ bool sameLines(Vec4i line1, Vec4i line2) {
     float A1, A2, b1, b2, Yaxis1, Xaxis1, Yaxis2, Xaxis2, angle1, angle2;
 
     float len1 = sqrt(float(line1[2] - line1[0])*float(line1[2] - line1[0]) + float(line1[3] - line1[1])*float(line1[3] - line1[1]));
-    std::cout<<"len: "<<len1<<endl;
     if(abs(float(line1[2] - line1[0])) < 0.01 * len1) {
         //linia 1 pionowa
         angle1 = 90.0;
@@ -117,7 +116,6 @@ bool sameLines(Vec4i line1, Vec4i line2) {
 
     float diffA = abs(angle1 - angle2);
 
-    cout<<diffA<<"\t"<<A2<<"\t"<<b1<<"\t"<<b2<<endl;
     if(diffA < 5.0 && (abs(Yaxis1 - Yaxis2) < 100 || abs(Xaxis1 - Xaxis2) < 100)) {
         return true;
     }
