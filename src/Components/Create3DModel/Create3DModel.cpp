@@ -17,14 +17,8 @@ namespace Create3DModel {
 
 Create3DModel::Create3DModel(const std::string & name) :
 		Base::Component(name) ,
-		width("width", 20, "range"),
-		height("height", 30, "range") {
-
-    width.addConstraint("1");
-    width.addConstraint("1000");
-
-    height.addConstraint("1");
-    height.addConstraint("1000");
+		width("width", 0.2),
+		height("height", 0.2) {
 
 	registerProperty(width);
 	registerProperty(height);
@@ -66,7 +60,7 @@ void Create3DModel::initModel() {
     sheet->setModelPoints(modelPoints);
 }
 
-void Create3DModel::sizeCallback(int old_val, int new_val) {
+void Create3DModel::sizeCallback(float old_val, float new_val) {
     initModel();
 }
 

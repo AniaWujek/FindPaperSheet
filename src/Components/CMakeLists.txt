@@ -14,3 +14,8 @@ ADD_COMPONENT(CvHarris)
 ADD_COMPONENT(ImprovedCorners)
 
 ADD_COMPONENT(Create3DModel)
+
+ADD_COMPONENT(CvSolvePnP)
+
+ADD_COMPONENT(DrawCoordinateSystem)
+

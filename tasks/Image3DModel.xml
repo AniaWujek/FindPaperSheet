@@ -8,22 +8,16 @@
         <Subtask name="main">
 
             <Executor name="Loader" period="0.4">
-                <Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
-					<param name="camera_serial">13481977</param>
-					<param name="width">1296</param>
-					<param name="height">1032</param>
-					<param name="shutter_mode">manual</param>
-					<param name="shutter_value">80</param>
-					<param name="gain_mode">manual</param>
-					<param name="gain_value">2</param>
-					<param name="frame_rate_value">10</param>
-					<param name="frame_rate_mode">manual</param>
-				</Component>
+                <Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
+                    <param name="sequence.directory">%[TASK_LOCATION]%/../data/</param>
+                    <param name="sequence.pattern">.*\.png</param>
+                    <param name="mode.loop">1</param>
+                </Component>
                 <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
-					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
+					<param name="camera_matrix">1 0 0 ; 0 1 0 ; 0 0 1</param>
+					<param name="dist_coeffs">0 0 0 0 0</param>
 				</Component>
 				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3" bump="0">
 				</Component>
@@ -77,28 +71,12 @@
 		        <Component name="DrawCorners2" type="EdgeDetection:DrawCorners" priority="11">
 		        </Component>
 
-		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="12">
-                    <param name="width">0.21</param>
-                    <param name="height">0.297</param>
-		        </Component>
-
-		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="13">
-		        </Component>
-
-		        <Component name="CoordinateSys" type="FindPaperSheet:DrawCoordinateSystem" priority="14">
-		        </Component>
-
-		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="15">
-		        </Component>
-
-
-
             </Executor>
 
-            <Executor name="Displayer" period="0.2">
+            <Executor name="Displayer" period="0.5">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">3</param>
-                    <param name="title">old, better, coordinate</param>
+                    <param name="count">2</param>
+                    <param name="title">old, better</param>
                 </Component>
 
             </Executor>
@@ -111,14 +89,11 @@
         </Source>
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
-        	<sink>SolvePnP.in_camerainfo</sink>
-        	<sink>CoordinateSys.in_camera_matrix</sink>
         </Source>
         <Source name="Undistort.out_img">
             <sink>Conv2gray.in_img</sink>
             <sink>DrawCorners1.in_img</sink>
             <sink>DrawCorners2.in_img</sink>
-            <sink>DrawCoordinate.in_img</sink>
         </Source>
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
@@ -159,37 +134,10 @@
         </Source>
         <Source name="ImproveCorners.out_corners">
             <sink>DrawCorners2.in_corners</sink>
-            <sink>Model.in_corners</sink>
-        </Source>
-        <Source name="Model.out_model">
-            <sink>SolvePnP.in_object3d</sink>
         </Source>
         <Source name="DrawCorners2.out_img">
             <sink>Displayer.in_img1</sink>
         </Source>
-
-        <Source name="SolvePnP.out_homogMatrix">
-            <sink>CoordinateSys.in_homogMatrix</sink>
-        </Source>
-        <Source name="SolvePnP.out_rvec">
-            <sink>CoordinateSys.in_rvec</sink>
-        </Source>
-        <Source name="SolvePnP.out_tvec">
-            <sink>CoordinateSys.in_tvec</sink>
-        </Source>
-
-        <Source name="CoordinateSys.out_csystem">
-            <sink>DrawCoordinate.in_csystem</sink>
-        </Source>
-        <Source name="CoordinateSys.out_impoints">
-            <sink>DrawCoordinate.in_impoints</sink>
-        </Source>
-        <Source name="DrawCoordinate.out_img">
-            <sink>Displayer.in_img2</sink>
-        </Source>
-
-
-
 
     </DataStreams>
 </Task>

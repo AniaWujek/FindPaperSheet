@@ -89,29 +89,29 @@ void ImprovedCorners::improveCorners() {
     cv::Mat roi1, roi2, roi3, roi4;
     for(int i = 0; i < corners.size() && i < 4; ++i) {
         float px = max(corners[i].x - roiSize / 2.0, 0.0);
-        if(px > maxX) {
-            px = maxX;
+        if(px >= maxX) {
+            px = maxX-1;
         }
         if(px < 0) {
             px = 0;
         }
         float py = max(corners[i].y - roiSize / 2.0, 0.0);
-        if(py > maxY) {
-            py = maxY;
+        if(py >= maxY) {
+            py = maxY-1;
         }
         if(py < 0) {
             py = 0;
         }
         float kx = roiSize;
-        if(px + kx > maxX) {
-            kx = maxX - px;
+        if(px + kx >= maxX) {
+            kx = maxX - px - 1;
         }
 
         float ky = roiSize;
-        if(py + ky > maxY) {
-            ky = maxY - py;
+        if(py + ky >= maxY) {
+            ky = maxY - py - 1;
         }
-        std::cout<<"dim: "<<px<<"\t"<<py<<"\t"<<kx<<"\t"<<ky<<std::endl;
+
         cv::Mat oneRoi = image(cv::Rect(px,py,kx,ky));
         x.push_back(px);
         y.push_back(py);
@@ -126,7 +126,6 @@ void ImprovedCorners::improveCorners() {
         temp[0].y+=y[i];
         better_corners.push_back(temp[0]);
     }
-    cout<<better_corners[0]<<"\t"<<better_corners[1]<<"\t"<<better_corners[2]<<"\t"<<better_corners[3]<<std::endl;
     out_corners.write(better_corners);
 }
 

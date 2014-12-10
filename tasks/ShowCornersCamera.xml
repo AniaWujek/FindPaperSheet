@@ -71,10 +71,6 @@
 		        <Component name="DrawCorners" type="EdgeDetection:DrawCorners" priority="9">
 		        </Component>
 
-
-
-
-
             </Executor>
 
             <Executor name="Displayer" period="0.5">
