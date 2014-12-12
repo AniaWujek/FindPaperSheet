@@ -71,7 +71,6 @@ bool CvSolvePnP_Processor::onInit()
 {
 	LOG(LTRACE) << "CvSolvePnP_Processor::onInit()\n";
 
-
 	return true;
 }
 
@@ -86,7 +85,7 @@ void CvSolvePnP_Processor::onNewObject3D()
 	CLOG(LTRACE) << "CvSolvePnP_Processor::onNewObject3D()\n";
 	boost::shared_ptr <Types::Objects3D::Object3D> object3D = in_object3d.read();
 
-	Types::CameraInfo camera_info = in_camerainfo.read();
+    Types::CameraInfo camera_info = in_camerainfo.read();
 
 	Mat_<double> rvec;
 	Mat_<double> tvec;

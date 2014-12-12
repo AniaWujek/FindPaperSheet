@@ -126,6 +126,8 @@ private:
 	Base::DataStreamOut <Types::HomogMatrix> out_homogMatrix;
 	Base::DataStreamOut <cv::Mat> out_rvec;
 	Base::DataStreamOut <cv::Mat> out_tvec;
+
+
 };
 
 } // namespace CvSolvePnP

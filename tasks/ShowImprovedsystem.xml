@@ -1,0 +1,210 @@
+<Task>
+    <Reference>
+        <Description>
+            <brief>Find edges</brief>
+        </Description>
+    </Reference>
+    <Subtasks>
+        <Subtask name="main">
+
+            <Executor name="Loader" period="0.6">
+                <Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
+					<param name="camera_serial">13481977</param>
+					<param name="width">1296</param>
+					<param name="height">1032</param>
+					<param name="shutter_mode">manual</param>
+					<param name="shutter_value">80</param>
+					<param name="gain_mode">manual</param>
+					<param name="gain_value">2</param>
+					<param name="frame_rate_value">10</param>
+					<param name="frame_rate_mode">manual</param>
+				</Component>
+                <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
+					<param name="width">1296</param>
+					<param name="height">1032</param>
+					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
+					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
+				</Component>
+
+				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
+				</Component>
+				<Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
+                    <param name="thresh">200</param>
+                    <param name="maxval">255</param>
+				</Component>
+
+				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5">
+            		<param name="type">CV_RGB2GRAY</param>
+            	</Component>
+
+
+
+            </Executor>
+
+            <Executor name="Processor" period="0.5">
+
+
+
+                <Component name="Morphology1" type="CvBasic:CvMorphology" priority="1">
+                    <param name="iterations">3</param>
+                    <param name="type">MORPH_OPEN</param>
+                </Component>
+                <Component name="Morphology2" type="CvBasic:CvMorphology" priority="2">
+                    <param name="iterations">3</param>
+                    <param name="type">MORPH_CLOSE</param>
+                </Component>
+
+            	<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="3">
+            		<param name="kernel.width">3</param>
+					<param name="kernel.height">3</param>
+					<param name="sigma.x">2</param>
+					<param name="sigma.y">2</param>
+            	</Component>
+
+		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="4">
+		        </Component>
+		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="5">
+		        </Component>
+		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="6">
+                    <param name="threshold">60</param>
+		        </Component>
+		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="7">
+		        </Component>
+
+		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="8">
+		        </Component>
+
+		        <Component name="ImproveCorners" type="FindPaperSheet:ImprovedCorners" priority="9">
+		        </Component>
+
+		        <Component name="DrawCorners1" type="EdgeDetection:DrawCorners" priority="10">
+		        </Component>
+
+		        <Component name="DrawCorners2" type="EdgeDetection:DrawCorners" priority="11">
+		        </Component>
+
+		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="12">
+                    <param name="width">0.21</param>
+                    <param name="height">0.297</param>
+		        </Component>
+
+		        <Component name="Calib" type="FindPaperSheet:Calib" priority="13">
+		        </Component>
+
+		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="14">
+		        </Component>
+
+		        <Component name="CoordinateSys" type="FindPaperSheet:DrawCoordinateSystem" priority="15">
+		        </Component>
+
+		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="16">
+		        </Component>
+
+
+
+            </Executor>
+
+            <Executor name="Displayer" period="0.2">
+                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
+                    <param name="count">3</param>
+                    <param name="title">old, better, coordinate</param>
+                </Component>
+
+            </Executor>
+        </Subtask>
+    </Subtasks>
+
+    <DataStreams>
+        <Source name="Source.out_img">
+        	<sink>Undistort.in_img</sink>
+        </Source>
+        <Source name="CameraInfo.out_camera_info">
+        	<sink>Undistort.in_camera_info</sink>
+
+        	<sink>Calib.in_camera_info</sink>
+        </Source>
+        <Source name="Undistort.out_img">
+            <sink>Conv2gray.in_img</sink>
+            <sink>DrawCorners1.in_img</sink>
+            <sink>DrawCorners2.in_img</sink>
+            <sink>DrawCoordinate.in_img</sink>
+        </Source>
+        <Source name="Thresholding.out_img">
+            <sink>Morphology1.in_img</sink>
+        </Source>
+        <Source name="Morphology1.out_img">
+            <sink>Morphology2.in_img</sink>
+        </Source>
+        <Source name="Morphology2.out_img">
+            <sink>GaussianBlur.in_img</sink>
+        	<sink>DrawEdges.in_img</sink>
+        	<sink>DrawLines.in_img</sink>
+        </Source>
+        <Source name="Conv2gray.out_img">
+        	<sink>Thresholding.in_img</sink>
+        	<sink>ImproveCorners.in_img</sink>
+        </Source>
+        <Source name="GaussianBlur.out_img">
+        	<sink>FindEdges.in_img</sink>
+        </Source>
+        <Source name="FindEdges.out_edges">
+        	<sink>DrawEdges.in_edges</sink>
+        </Source>
+        <Source name="DrawEdges.out_img">
+            <sink>Lines.in_img</sink>
+        </Source>
+        <Source name="Lines.out_linesDrawable">
+            <sink>DrawLines.in_lines</sink>
+        </Source>
+        <Source name="Lines.out_lines">
+            <sink>FindCorners.in_lines</sink>
+        </Source>
+        <Source name="FindCorners.out_corners">
+            <sink>DrawCorners1.in_corners</sink>
+            <sink>ImproveCorners.in_corners</sink>
+        </Source>
+        <Source name="DrawCorners1.out_img">
+            <sink>Displayer.in_img0</sink>
+        </Source>
+        <Source name="ImproveCorners.out_corners">
+            <sink>DrawCorners2.in_corners</sink>
+            <sink>Model.in_corners</sink>
+        </Source>
+        <Source name="Model.out_model">
+            <sink>SolvePnP.in_object3d</sink>
+            <sink>Calib.in_object3d</sink>
+        </Source>
+        <Source name="DrawCorners2.out_img">
+            <sink>Displayer.in_img1</sink>
+        </Source>
+
+        <Source name="SolvePnP.out_homogMatrix">
+            <sink>CoordinateSys.in_homogMatrix</sink>
+        </Source>
+        <Source name="SolvePnP.out_rvec">
+            <sink>CoordinateSys.in_rvec</sink>
+        </Source>
+        <Source name="SolvePnP.out_tvec">
+            <sink>CoordinateSys.in_tvec</sink>
+        </Source>
+
+        <Source name="CoordinateSys.out_csystem">
+            <sink>DrawCoordinate.in_csystem</sink>
+        </Source>
+        <Source name="CoordinateSys.out_impoints">
+            <sink>DrawCoordinate.in_impoints</sink>
+        </Source>
+        <Source name="DrawCoordinate.out_img">
+            <sink>Displayer.in_img2</sink>
+        </Source>
+
+        <Source name="Calib.out_camera_info">
+            <sink>SolvePnP.in_camerainfo</sink>
+        	<sink>CoordinateSys.in_camera_matrix</sink>
+        </Source>
+
+
+
+
+    </DataStreams>
+</Task>
