@@ -7,7 +7,7 @@
     <Subtasks>
         <Subtask name="main">
 
-            <Executor name="Loader" period="0.4">
+            <Executor name="Loader" period="0.6">
                 <Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
                     <param name="sequence.directory">%[TASK_LOCATION]%/../data/</param>
                     <param name="sequence.pattern">.*\.png</param>
@@ -19,7 +19,8 @@
 					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
 					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
 				</Component>
-				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3" bump="0">
+
+				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
 				</Component>
 				<Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
                     <param name="thresh">200</param>
@@ -29,9 +30,12 @@
 				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5">
             		<param name="type">CV_RGB2GRAY</param>
             	</Component>
+
             </Executor>
 
             <Executor name="Processor" period="0.5">
+
+
 
                 <Component name="Morphology1" type="CvBasic:CvMorphology" priority="1">
                     <param name="iterations">3</param>
@@ -62,18 +66,26 @@
 		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="8">
 		        </Component>
 
-		        <Component name="DrawCorners" type="EdgeDetection:DrawCorners" priority="9">
+		        <Component name="ImproveCorners" type="FindPaperSheet:ImprovedCorners" priority="9">
 		        </Component>
 
-		        <Component name="ROI" type="FindPaperSheet:ROI" priority="10">
+
+		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="12">
+                    <param name="width">0.21</param>
+                    <param name="height">0.297</param>
 		        </Component>
+
+		        <Component name="Calib" type="FindPaperSheet:Calib" priority="13">
+		        </Component>
+
+
             </Executor>
 
             <Executor name="Displayer" period="0.5">
-                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">6</param>
-                    <param name="title">o1,o2,o3,o4,ori, thresh</param>
-                </Component>
+                <!--<Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
+                    <param name="count">3</param>
+                    <param name="title">old, better, coordinate</param>
+                </Component>-->
 
             </Executor>
         </Subtask>
@@ -85,16 +97,13 @@
         </Source>
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
+        	<sink>Calib.in_camera_info</sink>
         </Source>
         <Source name="Undistort.out_img">
             <sink>Conv2gray.in_img</sink>
-            <sink>DrawCorners.in_img</sink>
-            <sink>ROI.in_img</sink>
-
         </Source>
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
-
         </Source>
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
@@ -103,10 +112,10 @@
             <sink>GaussianBlur.in_img</sink>
         	<sink>DrawEdges.in_img</sink>
         	<sink>DrawLines.in_img</sink>
-        	<sink>Displayer.in_img5</sink>
         </Source>
         <Source name="Conv2gray.out_img">
         	<sink>Thresholding.in_img</sink>
+        	<sink>ImproveCorners.in_img</sink>
         </Source>
         <Source name="GaussianBlur.out_img">
         	<sink>FindEdges.in_img</sink>
@@ -124,23 +133,15 @@
             <sink>FindCorners.in_lines</sink>
         </Source>
         <Source name="FindCorners.out_corners">
-            <sink>DrawCorners.in_corners</sink>
-            <sink>ROI.in_corners</sink>
+            <sink>ImproveCorners.in_corners</sink>
         </Source>
-        <Source name="DrawCorners.out_img">
-            <sink>Displayer.in_img4</sink>
+
+        <Source name="ImproveCorners.out_corners">
+            <sink>Model.in_corners</sink>
         </Source>
-        <Source name="ROI.out_corner1">
-            <sink>Displayer.in_img0</sink>
-        </Source>
-        <Source name="ROI.out_corner2">
-            <sink>Displayer.in_img1</sink>
-        </Source>
-        <Source name="ROI.out_corner3">
-            <sink>Displayer.in_img2</sink>
-        </Source>
-        <Source name="ROI.out_corner4">
-            <sink>Displayer.in_img3</sink>
+
+        <Source name="Model.out_model">
+            <sink>Calib.in_object3d</sink>
         </Source>
 
     </DataStreams>
