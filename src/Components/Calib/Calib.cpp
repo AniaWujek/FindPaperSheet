@@ -44,6 +44,7 @@ void Calib::prepareInterface() {
 	h_perform_calibration.setup(boost::bind(&Calib::perform_calibration, this));
 	registerHandler("perform_calibration", &h_perform_calibration);
 
+
 	// Register handler setting the flag for acquisition of a single object3D.
 	h_add_object3D.setup(boost::bind(&Calib::add_object3D, this));
 	registerHandler("add_object3D", &h_add_object3D);
@@ -51,6 +52,8 @@ void Calib::prepareInterface() {
 	// Register handler realizing the clearance of the whole dataset.
 	h_clear_dataset.setup(boost::bind(&Calib::clear_dataset, this));
 	registerHandler("clear_dataset", &h_clear_dataset);
+
+
 }
 
 bool Calib::onInit() {
@@ -148,6 +151,7 @@ void Calib::perform_calibration()
     }
     else
 		LOG(LERROR) << "Calib: dataset empty\n";
+		std::cout<<"calib\n";
 
 }
 

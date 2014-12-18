@@ -80,7 +80,7 @@ void FindCorners::FindIntersection() {
     for(int i = 0; i < lines.size(); ++i) {
         for(int j = i+1; j < lines.size(); ++j) {
             cv::Point2f pt = computeIntersect(lines[i], lines[j]);
-            if(pt.x >= 0 && pt.y >= 0) {
+            if(pt.x >= 0 && pt.y >= 0 && pt.x < 1296 && pt.y < 1032) {
                 corners.push_back(pt);
             }
         }
