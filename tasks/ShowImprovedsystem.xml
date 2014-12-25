@@ -106,8 +106,8 @@
 
             <Executor name="Displayer" period="0.2">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">3</param>
-                    <param name="title">old, better, coordinate</param>
+                    <param name="count">4</param>
+                    <param name="title">old, better, coordinate, thresh</param>
                 </Component>
 
             </Executor>
@@ -131,6 +131,7 @@
         </Source>
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
+
         </Source>
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
@@ -152,9 +153,14 @@
         </Source>
         <Source name="DrawEdges.out_img">
             <sink>Lines.in_img</sink>
+
         </Source>
         <Source name="Lines.out_linesDrawable">
             <sink>DrawLines.in_lines</sink>
+
+        </Source>
+        <Source name="DrawLines.out_img">
+            <sink>Displayer.in_img3</sink>
         </Source>
         <Source name="Lines.out_lines">
             <sink>FindCorners.in_lines</sink>

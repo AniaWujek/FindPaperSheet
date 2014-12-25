@@ -122,12 +122,9 @@ void ImprovedCorners::improveCorners() {
     for(int i = 0; i < rois.size(); ++i) {
         std::vector<cv::Point2f> temp;
         goodFeaturesToTrack(rois[i], temp, 2, qualityLevel, 10, cv::Mat(), blockSize, false, k);
-        if(temp.size() > 0 ) {
-            temp[0].x+=x[i];
-            temp[0].y+=y[i];
-            better_corners.push_back(temp[0]);
-        }
-        else better_corners.push_back(corners[i]);
+        temp[0].x+=x[i];
+        temp[0].y+=y[i];
+        better_corners.push_back(temp[0]);
     }
     out_corners.write(better_corners);
 }

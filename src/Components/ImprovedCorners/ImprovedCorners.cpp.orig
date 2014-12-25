@@ -77,6 +77,7 @@ bool ImprovedCorners::onStart() {
 
 
 void ImprovedCorners::improveCorners() {
+    std::cout<<"jestem tu!\n";
 
     cv::Mat image = in_img.read().clone();
     std::vector<cv::Point2f> corners = in_corners.read();
@@ -85,6 +86,7 @@ void ImprovedCorners::improveCorners() {
     std::vector<cv::Mat> rois;
     std::vector<float> x;
     std::vector<float> y;
+    std::cout<<"i tu!\n";
 
     cv::Mat roi1, roi2, roi3, roi4;
     for(int i = 0; i < corners.size() && i < 4; ++i) {
@@ -117,17 +119,30 @@ void ImprovedCorners::improveCorners() {
         y.push_back(py);
         rois.push_back(oneRoi);
     }
+    
 
     std::vector<cv::Point2f> better_corners;
     for(int i = 0; i < rois.size(); ++i) {
         std::vector<cv::Point2f> temp;
         goodFeaturesToTrack(rois[i], temp, 2, qualityLevel, 10, cv::Mat(), blockSize, false, k);
+<<<<<<< HEAD
+        
+        if(temp.size() > 0)
+        {
+=======
         if(temp.size() > 0 ) {
+>>>>>>> 67aabdb6fd303dbe33f7533effd9a52e31aaf4ee
             temp[0].x+=x[i];
             temp[0].y+=y[i];
             better_corners.push_back(temp[0]);
         }
+<<<<<<< HEAD
+    }
+    for(int j = 0 ; j < better_corners.size(); ++j) {
+        std::cout<<"B: "<<better_corners[j]<<"\t O: "<<corners[j]<<std::endl;
+=======
         else better_corners.push_back(corners[i]);
+>>>>>>> 67aabdb6fd303dbe33f7533effd9a52e31aaf4ee
     }
     out_corners.write(better_corners);
 }
