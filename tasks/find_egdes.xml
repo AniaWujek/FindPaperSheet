@@ -25,6 +25,7 @@
 				<Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
                     <param name="thresh">200</param>
                     <param name="maxval">255</param>
+
 				</Component>
 
 				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5">
