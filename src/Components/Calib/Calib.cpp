@@ -43,11 +43,15 @@ void Calib::prepareInterface() {
 	// Register handler performing the calibration.
 	h_perform_calibration.setup(boost::bind(&Calib::perform_calibration, this));
 	registerHandler("perform_calibration", &h_perform_calibration);
+	addDependency("perform_calibration", &in_object3D);
+	addDependency("perform_calibration", &in_camerainfo);
 
 
 	// Register handler setting the flag for acquisition of a single object3D.
 	h_add_object3D.setup(boost::bind(&Calib::add_object3D, this));
 	registerHandler("add_object3D", &h_add_object3D);
+	addDependency("add_object3D", &in_object3D);
+	addDependency("add_object3D", &in_camerainfo);
 
 	// Register handler realizing the clearance of the whole dataset.
 	h_clear_dataset.setup(boost::bind(&Calib::clear_dataset, this));
@@ -107,6 +111,7 @@ void Calib::clear_dataset()
 {
 	imagePoints.clear();
 	objectPoints.clear();
+	std::cout<<"\n\nCLEAR OBJECT\n\n";
 	CLOG(LINFO) << "Dataset cleared";
 }
 
@@ -133,9 +138,9 @@ void Calib::perform_calibration()
 		double errors = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs);
 
 		// Display the results.
-		LOG(LNOTICE) << "Calibration ended with reprojection error =" << errors;
-		LOG(LNOTICE) << "Camera matrix: " << cameraMatrix;
-		LOG(LNOTICE) << "Distortion coefficients: " << distCoeffs;
+		//LOG(LNOTICE) << "Calibration ended with reprojection error =" << errors;
+		//LOG(LNOTICE) << "Camera matrix: " << cameraMatrix;
+		//LOG(LNOTICE) << "Distortion coefficients: " << distCoeffs;
 
 		Types::CameraInfo camera_info;
 		camera_info.setSize(imageSize);
@@ -144,6 +149,8 @@ void Calib::perform_calibration()
 		camera_info.setRotationMatrix(cv::Mat::eye(3, 3, CV_64F));
 		camera_info.setTranlationMatrix(cv::Mat::zeros(3, 1, CV_64F));
 
+
+
 		// Write parameters to the camerainfo
 		out_camerainfo.write(camera_info);
 
@@ -151,7 +158,6 @@ void Calib::perform_calibration()
     }
     else
 		LOG(LERROR) << "Calib: dataset empty\n";
-		std::cout<<"calib\n";
 
 }
 

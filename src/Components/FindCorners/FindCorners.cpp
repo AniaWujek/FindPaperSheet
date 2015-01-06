@@ -86,7 +86,7 @@ void FindCorners::FindIntersection() {
         }
     }
     std::sort(corners.begin(), corners.end(), myComp);
-    std::cout<<corners.size()<<std::endl;
+    //std::cout<<corners.size()<<std::endl;
 
     out_corners.write(corners);
 }

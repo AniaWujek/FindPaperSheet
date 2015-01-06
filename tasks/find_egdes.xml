@@ -1,0 +1,109 @@
+<Task>
+    <Reference>
+        <Description>
+            <brief>Find edges</brief>
+        </Description>
+    </Reference>
+    <Subtasks>
+        <Subtask name="main">
+
+            <Executor name="Loader" period="0.6">
+                <Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
+                    <param name="sequence.directory">%[TASK_LOCATION]%/../data/</param>
+                    <param name="sequence.pattern">.*\.png</param>
+                    <param name="mode.loop">1</param>
+                </Component>
+                <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
+					<param name="width">1296</param>
+					<param name="height">1032</param>
+					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
+					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
+				</Component>
+
+				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
+				</Component>
+				<Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
+                    <param name="thresh">200</param>
+                    <param name="maxval">255</param>
+				</Component>
+
+				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5">
+            		<param name="type">CV_RGB2GRAY</param>
+            	</Component>
+
+
+
+            </Executor>
+
+            <Executor name="Processor" period="0.5">
+
+
+
+                <Component name="Morphology1" type="CvBasic:CvMorphology" priority="1">
+                    <param name="iterations">3</param>
+                    <param name="type">MORPH_OPEN</param>
+                </Component>
+                <Component name="Morphology2" type="CvBasic:CvMorphology" priority="2">
+                    <param name="iterations">3</param>
+                    <param name="type">MORPH_CLOSE</param>
+                </Component>
+
+            	<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="3">
+            		<param name="kernel.width">3</param>
+					<param name="kernel.height">3</param>
+					<param name="sigma.x">2</param>
+					<param name="sigma.y">2</param>
+            	</Component>
+
+
+
+
+
+            </Executor>
+
+            <Executor name="Displayer" period="0.2">
+                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
+                    <param name="count">2</param>
+                    <param name="title">ori, thresh</param>
+                </Component>
+
+            </Executor>
+
+
+        </Subtask>
+    </Subtasks>
+
+    <DataStreams>
+        <Source name="Source.out_img">
+        	<sink>Undistort.in_img</sink>
+        	<sink>Displayer.in_img0</sink>
+        </Source>
+        <Source name="CameraInfo.out_camera_info">
+        	<sink>Undistort.in_camera_info</sink>
+
+
+        </Source>
+        <Source name="Undistort.out_img">
+            <sink>Conv2gray.in_img</sink>
+
+        </Source>
+        <Source name="Thresholding.out_img">
+            <sink>Morphology1.in_img</sink>
+            <sink>Displayer.in_img1</sink>
+        </Source>
+        <Source name="Morphology1.out_img">
+            <sink>Morphology2.in_img</sink>
+        </Source>
+        <Source name="Morphology2.out_img">
+            <sink>GaussianBlur.in_img</sink>
+
+        </Source>
+        <Source name="Conv2gray.out_img">
+        	<sink>Thresholding.in_img</sink>
+
+        </Source>
+
+
+
+    </DataStreams>
+</Task>

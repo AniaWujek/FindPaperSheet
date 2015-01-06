@@ -126,6 +126,7 @@ private:
 	Base::DataStreamOut <Types::HomogMatrix> out_homogMatrix;
 	Base::DataStreamOut <cv::Mat> out_rvec;
 	Base::DataStreamOut <cv::Mat> out_tvec;
+	Base::DataStreamOut <std::vector<float> > out_matrix_rvec_tvec;
 
 
 };

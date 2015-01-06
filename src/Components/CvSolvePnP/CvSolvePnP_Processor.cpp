@@ -53,6 +53,7 @@ void CvSolvePnP_Processor::prepareInterface() {
 	registerStream("out_homogMatrix", &out_homogMatrix);
 	registerStream("out_rvec", &out_rvec);
 	registerStream("out_tvec", &out_tvec);
+	registerStream("out_matrix_rvec_tvec", &out_matrix_rvec_tvec);
 }
 
 bool CvSolvePnP_Processor::onStart()
@@ -157,16 +158,36 @@ void CvSolvePnP_Processor::onNewObject3D()
 		}
 	}
 	CLOG(LDEBUG) << "HomogMatrix:\n" << ss.str() << endl;
-    for(int i =0; i < 3; ++i) {
+    /*for(int i =0; i < 3; ++i) {
         for(int j = 0; j < 4; j++) {
                 std::cout<<hm.elements[i][j]<<" ";
             }
         std::cout<<std::endl;
-    }
-    std::cout<<std::endl<<rvec.size()<<" "<<tvec.size();
+    }*/
+
 	out_rvec.write(rvec.clone());
 	out_tvec.write(tvec.clone());
 	out_homogMatrix.write(hm);
+
+	std::vector<float> m;
+	for(int i = 0; i < 3; ++i) {
+        for(int j = 0; j < 4; j++) {
+                m.push_back(hm.elements[i][j]);
+            }
+    }
+
+    for(int i = 0; i < 3; ++i) {
+        m.push_back(rvec[0][i]);
+    }
+
+    for(int i = 0; i < 3; ++i) {
+        m.push_back(tvec[0][i]);
+    }
+
+
+
+    out_matrix_rvec_tvec.write(m);
+
 }
 
 } // namespace CvSolvePnP
