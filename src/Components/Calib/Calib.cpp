@@ -79,6 +79,7 @@ bool Calib::onStart() {
 
 void Calib::process_object3D() {
 	CLOG(LTRACE) << "Calib::process_chessboard";
+	std::cout<<"\n CALIB \n";
     // Check component working mode.
     if (addObject3D || continuous) {
     	// Reset flag.
@@ -153,6 +154,8 @@ void Calib::perform_calibration()
 
 		// Write parameters to the camerainfo
 		out_camerainfo.write(camera_info);
+
+		std::cout<<"\nCalibration\n";
 
 
     }
