@@ -22,3 +22,5 @@ ADD_COMPONENT(DrawCoordinateSystem)
 
 ADD_COMPONENT(Calib)
 
+
+ADD_COMPONENT(ApplyMask)

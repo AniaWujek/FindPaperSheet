@@ -21,6 +21,7 @@ Calib::Calib(const std::string & name) :
 		continuous("continuous", false)
 {
 	addObject3D = false;
+	calibrated = false;
 	// Register properties.
 	registerProperty(continuous);
 }
@@ -57,6 +58,9 @@ void Calib::prepareInterface() {
 	h_clear_dataset.setup(boost::bind(&Calib::clear_dataset, this));
 	registerHandler("clear_dataset", &h_clear_dataset);
 
+	h_new_camera_info.setup(boost::bind(&Calib::new_camera_info, this));
+	registerHandler("new_camera_info", &h_new_camera_info);
+
 
 }
 
@@ -77,6 +81,10 @@ bool Calib::onStart() {
 	return true;
 }
 
+void Calib::new_camera_info() {
+    calibrated = false;
+}
+
 void Calib::process_object3D() {
 	CLOG(LTRACE) << "Calib::process_chessboard";
 	std::cout<<"\n CALIB \n";
@@ -84,6 +92,8 @@ void Calib::process_object3D() {
     if (addObject3D || continuous) {
     	// Reset flag.
     	addObject3D = false;
+    	//imagePoints.clear();
+        //objectPoints.clear();
 
 		// Retrieve chessboard from the inputstream.
 		Types::Objects3D::Object3D object = in_object3D.read();
@@ -116,11 +126,7 @@ void Calib::clear_dataset()
 	CLOG(LINFO) << "Dataset cleared";
 }
 
-void Calib::write_calibration() {
-    if(calibrated) {
-        out_camerainfo.write(camera_info);
-    }
-}
+
 
 void Calib::perform_calibration()
 {
@@ -153,26 +159,37 @@ void Calib::perform_calibration()
 		vector<cv::Mat> tvecs;
 
 		// Calibrate camera.
-		double errors = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs);
+		if(!calibrated) {
 
-		// Display the results.
-		//LOG(LNOTICE) << "Calibration ended with reprojection error =" << errors;
-		//LOG(LNOTICE) << "Camera matrix: " << cameraMatrix;
-		//LOG(LNOTICE) << "Distortion coefficients: " << distCoeffs;
+            calibrated = true;
+            double errors = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs);
 
-		Types::CameraInfo camera_info;
-		camera_info.setSize(imageSize);
-		camera_info.setCameraMatrix(cameraMatrix);
-		camera_info.setDistCoeffs(distCoeffs);
-		camera_info.setRotationMatrix(cv::Mat::eye(3, 3, CV_64F));
-		camera_info.setTranlationMatrix(cv::Mat::zeros(3, 1, CV_64F));
+            // Display the results.
+            //LOG(LNOTICE) << "Calibration ended with reprojection error =" << errors;
+            //LOG(LNOTICE) << "Camera matrix: " << cameraMatrix;
+            //LOG(LNOTICE) << "Distortion coefficients: " << distCoeffs;
+
+            Types::CameraInfo camera_info;
+            camera_info.setSize(imageSize);
+            camera_info.setCameraMatrix(cameraMatrix);
+            camera_info.setDistCoeffs(distCoeffs);
+            camera_info.setRotationMatrix(cv::Mat::eye(3, 3, CV_64F));
+            camera_info.setTranlationMatrix(cv::Mat::zeros(3, 1, CV_64F));
 
 
 
-		// Write parameters to the camerainfo
-		//out_camerainfo.write(camera_info);
+            // Write parameters to the camerainfo
+            const_camera_info = camera_info;
+            out_camerainfo.write(camera_info);
+		}
+		else {
 
-		if(!calibrated) calibrated = true;
+            out_camerainfo.write(const_camera_info);
+		}
+
+
+
+
 
 
 

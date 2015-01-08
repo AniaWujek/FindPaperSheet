@@ -20,14 +20,18 @@
 					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
 				</Component>
 
-				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
+				<Component name="mask" type="FindPaperSheet:ApplyMask" priority="3">
+
 				</Component>
-				<Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
+
+				<Component name="Undistort" type="CvBasic:CvUndistort" priority="4">
+				</Component>
+				<Component name="Thresholding" type="CvBasic:CvThreshold" priority="5">
                     <param name="thresh">200</param>
                     <param name="maxval">255</param>
 				</Component>
 
-				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5">
+				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="6">
             		<param name="type">CV_RGB2GRAY</param>
             	</Component>
 
@@ -96,6 +100,8 @@
 
 
 
+
+
             </Executor>
 
             <Executor name="Displayer" period="0.2">
@@ -117,6 +123,7 @@
 
     <DataStreams>
         <Source name="Source.out_img">
+
         	<sink>Undistort.in_img</sink>
         </Source>
         <Source name="CameraInfo.out_camera_info">
@@ -125,11 +132,17 @@
         	<sink>Calib.in_camera_info</sink>
         </Source>
         <Source name="Undistort.out_img">
+            <sink>mask.in_img</sink>
+
+        </Source>
+        <Source name="mask.out_img">
             <sink>Conv2gray.in_img</sink>
             <sink>DrawCorners1.in_img</sink>
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
+
         </Source>
+
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
         </Source>
@@ -170,6 +183,7 @@
         <Source name="ImproveCorners.out_corners">
             <sink>DrawCorners2.in_corners</sink>
             <sink>Model.in_corners</sink>
+
         </Source>
         <Source name="Model.out_model">
             <sink>SolvePnP.in_object3d</sink>
@@ -207,6 +221,8 @@
         <Source name="SolvePnP.out_matrix_rvec_tvec">
             <sink>proxy.in_data</sink>
         </Source>
+
+
 
 
 
