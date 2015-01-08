@@ -117,7 +117,7 @@ void DrawCoordinateSystem::projectPoints(){
 	out_csystem.write(ctr);
 	out_impoints.write(image_points);
 
-	std::cout<<"\ndraw coordinate system\n";
+
 }
 
 

@@ -80,56 +80,59 @@ void ImprovedCorners::improveCorners() {
 
     cv::Mat image = in_img.read().clone();
     std::vector<cv::Point2f> corners = in_corners.read();
-    double maxX = (float)image.cols;
-    double maxY = (float)image.rows;
-    std::vector<cv::Mat> rois;
-    std::vector<float> x;
-    std::vector<float> y;
+    if(corners.size() == 4) {
+        double maxX = (float)image.cols;
+        double maxY = (float)image.rows;
+        std::vector<cv::Mat> rois;
+        std::vector<float> x;
+        std::vector<float> y;
 
-    cv::Mat roi1, roi2, roi3, roi4;
-    for(int i = 0; i < corners.size() && i < 4; ++i) {
-        float px = max(corners[i].x - roiSize / 2.0, 0.0);
-        if(px >= maxX) {
-            px = maxX-1;
-        }
-        if(px < 0) {
-            px = 0;
-        }
-        float py = max(corners[i].y - roiSize / 2.0, 0.0);
-        if(py >= maxY) {
-            py = maxY-1;
-        }
-        if(py < 0) {
-            py = 0;
-        }
-        float kx = roiSize;
-        if(px + kx >= maxX) {
-            kx = maxX - px - 1;
+        cv::Mat roi1, roi2, roi3, roi4;
+        for(int i = 0; i < corners.size() && i < 4; ++i) {
+            float px = max(corners[i].x - roiSize / 2.0, 0.0);
+            if(px >= maxX) {
+                px = maxX-1;
+            }
+            if(px < 0) {
+                px = 0;
+            }
+            float py = max(corners[i].y - roiSize / 2.0, 0.0);
+            if(py >= maxY) {
+                py = maxY-1;
+            }
+            if(py < 0) {
+                py = 0;
+            }
+            float kx = roiSize;
+            if(px + kx >= maxX) {
+                kx = maxX - px - 1;
+            }
+
+            float ky = roiSize;
+            if(py + ky >= maxY) {
+                ky = maxY - py - 1;
+            }
+
+            cv::Mat oneRoi = image(cv::Rect(px,py,kx,ky));
+            x.push_back(px);
+            y.push_back(py);
+            rois.push_back(oneRoi);
         }
 
-        float ky = roiSize;
-        if(py + ky >= maxY) {
-            ky = maxY - py - 1;
+        std::vector<cv::Point2f> better_corners;
+        for(int i = 0; i < rois.size(); ++i) {
+            std::vector<cv::Point2f> temp;
+            goodFeaturesToTrack(rois[i], temp, 2, qualityLevel, 10, cv::Mat(), blockSize, false, k);
+            if(temp.size() > 0 ) {
+                temp[0].x+=x[i];
+                temp[0].y+=y[i];
+                better_corners.push_back(temp[0]);
+            }
+            else better_corners.push_back(corners[i]);
         }
-
-        cv::Mat oneRoi = image(cv::Rect(px,py,kx,ky));
-        x.push_back(px);
-        y.push_back(py);
-        rois.push_back(oneRoi);
+        out_corners.write(better_corners);
     }
 
-    std::vector<cv::Point2f> better_corners;
-    for(int i = 0; i < rois.size(); ++i) {
-        std::vector<cv::Point2f> temp;
-        goodFeaturesToTrack(rois[i], temp, 2, qualityLevel, 10, cv::Mat(), blockSize, false, k);
-        if(temp.size() > 0 ) {
-            temp[0].x+=x[i];
-            temp[0].y+=y[i];
-            better_corners.push_back(temp[0]);
-        }
-        else better_corners.push_back(corners[i]);
-    }
-    out_corners.write(better_corners);
 }
 
 

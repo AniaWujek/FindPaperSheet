@@ -116,9 +116,26 @@ void Calib::clear_dataset()
 	CLOG(LINFO) << "Dataset cleared";
 }
 
+void Calib::write_calibration() {
+    if(calibrated) {
+        out_camerainfo.write(camera_info);
+    }
+}
+
 void Calib::perform_calibration()
 {
     CLOG(LINFO) << "Calib::perform_calibration()";
+
+        timeval curTime;
+    gettimeofday(&curTime, NULL);
+    int milli = curTime.tv_usec / 1000;
+
+    char buffer [80];
+    strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", localtime(&curTime.tv_sec));
+
+    char currentTime[84] = "";
+    sprintf(currentTime, "%s:%d", buffer, milli);
+    std::cout<<"\n\ntime: "<<currentTime<<"\n\n";
 
     if(imagePoints.size() > 0) {
 		// The 3x3 camera matrix containing focal lengths fx,fy and displacement of the center of coordinates cx,cy.
@@ -153,9 +170,11 @@ void Calib::perform_calibration()
 
 
 		// Write parameters to the camerainfo
-		out_camerainfo.write(camera_info);
+		//out_camerainfo.write(camera_info);
 
-		std::cout<<"\nCalibration\n";
+		if(!calibrated) calibrated = true;
+
+
 
 
     }

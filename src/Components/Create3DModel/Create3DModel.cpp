@@ -11,6 +11,7 @@
 #include "Common/Logger.hpp"
 
 #include <boost/bind.hpp>
+#include <time.h>
 
 namespace Processors {
 namespace Create3DModel {
@@ -79,19 +80,15 @@ bool Create3DModel::onStart() {
 void Create3DModel::createModel() {
 
     std::vector<cv::Point2f> corners = in_corners.read();
-    sheet->setImagePoints(corners);
-    out_model.write(*sheet);
+    if(corners.size() == 4) {
+        sheet->setImagePoints(corners);
+        out_model.write(*sheet);
+    }
 
-    timeval curTime;
-    gettimeofday(&curTime, NULL);
-    int milli = curTime.tv_usec / 1000;
 
-    char buffer [80];
-    strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", localtime(&curTime.tv_sec));
 
-    char currentTime[84] = "";
-    sprintf(currentTime, "%s:%d", buffer, milli);
-    std::cout<<"\n\ntime: "<<currentTime<<"\n\n";
+
+
 }
 
 

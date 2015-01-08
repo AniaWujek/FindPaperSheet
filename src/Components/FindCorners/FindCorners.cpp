@@ -11,6 +11,7 @@
 #include "Common/Logger.hpp"
 
 #include <boost/bind.hpp>
+#include <math.h>
 
 namespace Processors {
 namespace FindCorners {
@@ -68,10 +69,13 @@ cv::Point2f computeIntersect(cv::Vec4i a, cv::Vec4i b) {
 
 struct myComp {
     bool operator() (cv::Point2f a, cv::Point2f b) {
-        if(abs(a.x - b.x) > 10) return a.x < b.x;
-        else return a.y < b.y;
+        //if(abs(a.x - b.x) > 10) return a.x < b.x;
+        //else return a.y < b.y;
+        return (a.x*a.x + a.y*a.y) < (b.x*b.x + b.y*b.y);
+
     }
 } myComp;
+
 
 void FindCorners::FindIntersection() {
     std::vector<cv::Point2f> corners;
@@ -85,10 +89,16 @@ void FindCorners::FindIntersection() {
             }
         }
     }
-    std::sort(corners.begin(), corners.end(), myComp);
-    //std::cout<<corners.size()<<std::endl;
+    if(corners.size() == 4) {
+        std::sort(corners.begin(), corners.end(), myComp);
+        //std::cout<<corners.size()<<std::endl;
 
-    out_corners.write(corners);
+        out_corners.write(corners);
+        std::cout<<"\ncorners: "<<corners.size()<<"\n";
+    }
+
+
+
 }
 
 
