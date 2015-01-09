@@ -4,8 +4,8 @@
  * \author Anna Wujek
  */
 
-#ifndef APPLYMASK_HPP_
-#define APPLYMASK_HPP_
+#ifndef ApplyCornerMask_HPP_
+#define ApplyCornerMask_HPP_
 
 #include "Component_Aux.hpp"
 #include "Component.hpp"
@@ -17,25 +17,25 @@
 
 
 namespace Processors {
-namespace ApplyMask {
+namespace ApplyCornerMask {
 
 /*!
- * \class ApplyMask
- * \brief ApplyMask processor class.
+ * \class ApplyCornerMask
+ * \brief ApplyCornerMask processor class.
  *
  *
  */
-class ApplyMask: public Base::Component {
+class ApplyCornerMask: public Base::Component {
 public:
 	/*!
 	 * Constructor.
 	 */
-	ApplyMask(const std::string & name = "ApplyMask");
+	ApplyCornerMask(const std::string & name = "ApplyCornerMask");
 
 	/*!
 	 * Destructor
 	 */
-	virtual ~ApplyMask();
+	virtual ~ApplyCornerMask();
 
 	/*!
 	 * Prepare components interface (register streams and handlers).
@@ -69,29 +69,30 @@ protected:
 
 	// Input data streams
 	Base::DataStreamIn<cv::Mat> in_img;
+	Base::DataStreamIn< std::vector<cv::Point2f> > in_corners;
 
 	// Output data streams
 	Base::DataStreamOut<cv::Mat> out_img;
 
 	// Handlers
-	Base::EventHandler2 h_apply_mask_proc;
-
+	Base::EventHandler2 h_apply_mask_proc_corners;
 
 	// Properties
 
 
-	// Handlers
-	void apply_mask_proc();
 
+	// Handlers
+
+	void apply_mask_proc_corners();
 
 };
 
-} //: namespace ApplyMask
+} //: namespace ApplyCornerMask
 } //: namespace Processors
 
 /*
  * Register processor component.
  */
-REGISTER_COMPONENT("ApplyMask", Processors::ApplyMask::ApplyMask)
+REGISTER_COMPONENT("ApplyCornerMask", Processors::ApplyCornerMask::ApplyCornerMask)
 
-#endif /* APPLYMASK_HPP_ */
+#endif /* ApplyCornerMask_HPP_ */

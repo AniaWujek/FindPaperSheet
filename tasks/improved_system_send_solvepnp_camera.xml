@@ -9,7 +9,7 @@
 
             <Executor name="Loader" period="2.0">
                 <Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
-					<param name="camera_serial">13481977</param>
+					<param name="camera_serial">14180973</param>
 					<param name="width">1296</param>
 					<param name="height">1032</param>
 
@@ -17,8 +17,8 @@
                 <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
-					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
+					<param name="camera_matrix">1299.351750 0.000000 650.629886 ; 0.000000 1292.515181 532.876867 ; 0.000000 0.000000 1.000000</param>
+					<param name="dist_coeffs">-0.420177 0.261718 0.002704 0.000718 0.000000</param>
 				</Component>
 
 				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
@@ -32,7 +32,7 @@
             <Executor name="Prepare to process" period="1.0">
 
                 <Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
-                    <param name="thresh">250</param>
+                    <param name="thresh">200</param>
                     <param name="maxval">255</param>
 				</Component>
 
@@ -87,8 +87,8 @@
                 <Component name="CameraInfoFaster" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-					<param name="camera_matrix">1052.974150 0.000000 646.343139 ; 0.000000 1048.529819 506.165068 ; 0.000000 0.000000 1.000000</param>
-					<param name="dist_coeffs">-0.405033 0.189376 0.000262 0.000465 0.000000</param>
+					<param name="camera_matrix">1299.351750 0.000000 650.629886 ; 0.000000 1292.515181 532.876867 ; 0.000000 0.000000 1.000000</param>
+					<param name="dist_coeffs">-0.420177 0.261718 0.002704 0.000718 0.000000</param>
 				</Component>
 
 		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="12">

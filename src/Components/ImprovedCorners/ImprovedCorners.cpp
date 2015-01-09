@@ -131,6 +131,9 @@ void ImprovedCorners::improveCorners() {
             else better_corners.push_back(corners[i]);
         }
         out_corners.write(better_corners);
+        for(int i = 0; i < 4; ++i) {
+            std::cout<<"\n corner: "<<corners[i]<<"\n";
+        }
     }
 
 }

@@ -184,6 +184,7 @@ void CvSolvePnP_Processor::onNewObject3D()
     for(int i = 0; i < 3; ++i) {
         m.push_back(tvec[0][i]);
     }
+    out_matrix_rvec_tvec.write(m);
 
 
 

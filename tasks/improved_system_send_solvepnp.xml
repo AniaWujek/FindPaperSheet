@@ -21,7 +21,6 @@
 				</Component>
 
 				<Component name="mask" type="FindPaperSheet:ApplyMask" priority="3">
-
 				</Component>
 
 				<Component name="Undistort" type="CvBasic:CvUndistort" priority="4">
@@ -98,6 +97,10 @@
 		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="16">
 		        </Component>
 
+		        <Component name="corner_mask" type="FindPaperSheet:ApplyCornerMask" priority="17">
+
+		        </Component>
+
 
 
 
@@ -106,15 +109,15 @@
 
             <Executor name="Displayer" period="0.2">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">3</param>
-                    <param name="title">old, better, coordinate</param>
+                    <param name="count">4</param>
+                    <param name="title">old, better, coordinate, mask</param>
                 </Component>
 
             </Executor>
 
             <Executor name="publisher" period="0.5">
                 <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="1">
-                    <param name="ros_topic_name">pnp</param>
+                    <param name="ros.topic_name">pnp</param>
                     <param name="mode.loop">1</param>
                 </Component>
             </Executor>
@@ -123,7 +126,7 @@
 
     <DataStreams>
         <Source name="Source.out_img">
-
+            <sink>corner_mask.in_img</sink>
         	<sink>Undistort.in_img</sink>
         </Source>
         <Source name="CameraInfo.out_camera_info">
@@ -133,6 +136,7 @@
         </Source>
         <Source name="Undistort.out_img">
             <sink>mask.in_img</sink>
+
 
         </Source>
         <Source name="mask.out_img">
@@ -183,7 +187,7 @@
         <Source name="ImproveCorners.out_corners">
             <sink>DrawCorners2.in_corners</sink>
             <sink>Model.in_corners</sink>
-
+            <sink>corner_mask.in_corners</sink>
         </Source>
         <Source name="Model.out_model">
             <sink>SolvePnP.in_object3d</sink>
@@ -220,6 +224,9 @@
 
         <Source name="SolvePnP.out_matrix_rvec_tvec">
             <sink>proxy.in_data</sink>
+        </Source>
+        <Source name="corner_mask.out_img">
+            <displayer>Displayer.in_img3</displayer>
         </Source>
 
 

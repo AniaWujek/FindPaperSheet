@@ -24,3 +24,5 @@ ADD_COMPONENT(Calib)
 
 
 ADD_COMPONENT(ApplyMask)
+
+ADD_COMPONENT(ApplyCornerMask)
