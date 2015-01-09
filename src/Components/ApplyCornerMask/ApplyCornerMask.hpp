@@ -4,8 +4,8 @@
  * \author Anna Wujek
  */
 
-#ifndef ApplyCornerMask_HPP_
-#define ApplyCornerMask_HPP_
+#ifndef APPLYCORNERMASK_HPP_
+#define APPLYCORNERMASK_HPP_
 
 #include "Component_Aux.hpp"
 #include "Component.hpp"
@@ -69,21 +69,19 @@ protected:
 
 	// Input data streams
 	Base::DataStreamIn<cv::Mat> in_img;
-	Base::DataStreamIn< std::vector<cv::Point2f> > in_corners;
+	Base::DataStreamIn<std::vector<cv::Point2f> > in_corners;
 
 	// Output data streams
 	Base::DataStreamOut<cv::Mat> out_img;
 
 	// Handlers
-	Base::EventHandler2 h_apply_mask_proc_corners;
+	Base::EventHandler2 h_applyMask;
 
 	// Properties
 
 
-
 	// Handlers
-
-	void apply_mask_proc_corners();
+	void applyMask();
 
 };
 
@@ -95,4 +93,4 @@ protected:
  */
 REGISTER_COMPONENT("ApplyCornerMask", Processors::ApplyCornerMask::ApplyCornerMask)
 
-#endif /* ApplyCornerMask_HPP_ */
+#endif /* APPLYCORNERMASK_HPP_ */

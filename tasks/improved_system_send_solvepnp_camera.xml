@@ -132,6 +132,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
+        	<sink>Displayer.in_img2</sink>
         </Source>
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
@@ -212,7 +213,7 @@
             <sink>DrawCoordinate.in_impoints</sink>
         </Source>
         <Source name="DrawCoordinate.out_img">
-            <sink>Displayer.in_img2</sink>
+            
         </Source>
 
         <Source name="Calib.out_camera_info">
