@@ -19,7 +19,7 @@ namespace Types {
 class Drawable {
 public:
 	Drawable() {
-		m_col = cv::Scalar(255,0,0);
+		m_col = cv::Scalar(255,255,255);
 	}
 
 	virtual ~Drawable() {}

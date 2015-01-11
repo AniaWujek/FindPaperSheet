@@ -82,6 +82,7 @@ protected:
 	// Properties
 	Base::Property<float> width;
 	Base::Property<float> height;
+	Base::Property<int> type;
 
     void sizeCallback(float old_value, float new_value);
     void initModel();

@@ -28,3 +28,5 @@ ADD_COMPONENT(ApplyMask)
 
 
 ADD_COMPONENT(ApplyCornerMask)
+
+ADD_COMPONENT(CvHoughLinesImage)

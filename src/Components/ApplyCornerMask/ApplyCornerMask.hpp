@@ -68,20 +68,20 @@ protected:
 
 
 	// Input data streams
-	Base::DataStreamIn<cv::Mat> in_img;
 	Base::DataStreamIn<std::vector<cv::Point2f> > in_corners;
+	Base::DataStreamIn<cv::Mat> in_img;
 
 	// Output data streams
 	Base::DataStreamOut<cv::Mat> out_img;
 
 	// Handlers
-	Base::EventHandler2 h_applyMask;
+	Base::EventHandler2 h_apply_mask;
 
 	// Properties
 
 
 	// Handlers
-	void applyMask();
+	void apply_mask();
 
 };
 
