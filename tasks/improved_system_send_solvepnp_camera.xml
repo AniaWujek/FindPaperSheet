@@ -32,7 +32,7 @@
             <Executor name="Prepare to process" period="1.0">
 
                 <Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
-                    <param name="thresh">200</param>
+                    <param name="thresh">100</param>
                     <param name="maxval">255</param>
 				</Component>
 
@@ -107,6 +107,9 @@
 
 		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="16">
 		        </Component>
+		        
+		        <Component name="CornerMask" type="FindPaperSheet:ApplyCornerMask" priority="17">
+		        </Component>
 
 
 
@@ -115,7 +118,7 @@
             <Executor name="Displayer" period="0.2">
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
                     <param name="count">4</param>
-                    <param name="title">old, better, coordinate, thresh</param>
+                    <param name="title">old, better, coordinate, corner</param>
                 </Component>
 
             </Executor>
@@ -132,7 +135,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
-        	<sink>Displayer.in_img2</sink>
+        	
         </Source>
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
@@ -145,10 +148,11 @@
             <sink>DrawCorners1.in_img</sink>
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
+            <sink>CornerMask.in_img</sink>
         </Source>
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
-            <sink>Displayer.in_img3</sink>
+            
         </Source>
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
@@ -187,6 +191,7 @@
         <Source name="ImproveCorners.out_corners">
             <sink>DrawCorners2.in_corners</sink>
             <sink>Model.in_corners</sink>
+            <sink>CornerMask.in_corners</sink>
         </Source>
         <Source name="Model.out_model">
             <sink>SolvePnP.in_object3d</sink>
@@ -213,7 +218,7 @@
             <sink>DrawCoordinate.in_impoints</sink>
         </Source>
         <Source name="DrawCoordinate.out_img">
-            
+            <sink>Displayer.in_img2</sink>
         </Source>
 
         <Source name="Calib.out_camera_info">
@@ -223,6 +228,10 @@
 
         <Source name="SolvePnP.out_matrix_rvec_tvec">
             <sink>proxy.in_data</sink>
+        </Source>
+        
+        <Source name="CornerMask.out_img">
+        	<sink>Displayer.in_img3</sink>
         </Source>
 
 
