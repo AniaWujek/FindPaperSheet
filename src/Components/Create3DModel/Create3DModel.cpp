@@ -19,10 +19,12 @@ namespace Create3DModel {
 Create3DModel::Create3DModel(const std::string & name) :
 		Base::Component(name) ,
 		width("width", 0.2),
-		height("height", 0.2) {
+		height("height", 0.2),
+		type("type", 1) {
 
 	registerProperty(width);
 	registerProperty(height);
+	registerProperty(type);
 
 	width.setCallback(boost::bind(&Create3DModel::sizeCallback, this, _1, _2));
 	height.setCallback(boost::bind(&Create3DModel::sizeCallback, this, _1, _2));
@@ -52,11 +54,19 @@ void Create3DModel::initModel() {
     sheet = boost::shared_ptr<Types::Objects3D::Object3D>(new Types::Objects3D::Object3D());
 
     std::vector<cv::Point3f> modelPoints;
+    if(type == 0) {
+        modelPoints.push_back(cv::Point3f(-width/2.0,-height/2.0,0));
+        modelPoints.push_back(cv::Point3f(width/2.0,-height/2.0,0));
+        modelPoints.push_back(cv::Point3f(-width/2.0,height/2.0,0));
+        modelPoints.push_back(cv::Point3f(width/2.0,height/2.0,0));
+    }
+    else {
+        modelPoints.push_back(cv::Point3f(0,0,0));
+        modelPoints.push_back(cv::Point3f(width,0,0));
+        modelPoints.push_back(cv::Point3f(0,height,0));
+        modelPoints.push_back(cv::Point3f(width,height,0));
+    }
 
-    modelPoints.push_back(cv::Point3f(0,0,0));
-    modelPoints.push_back(cv::Point3f(width,0,0));
-    modelPoints.push_back(cv::Point3f(0,height,0));
-    modelPoints.push_back(cv::Point3f(width,height,0));
 
     sheet->setModelPoints(modelPoints);
 }
