@@ -135,6 +135,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
+        	<sink>Displayer.in_img0</sink>
         	
         </Source>
         <Source name="CameraInfo.out_camera_info">
@@ -186,7 +187,7 @@
             <sink>ImproveCorners.in_corners</sink>
         </Source>
         <Source name="DrawCorners1.out_img">
-            <sink>Displayer.in_img0</sink>
+            
         </Source>
         <Source name="ImproveCorners.out_corners">
             <sink>DrawCorners2.in_corners</sink>

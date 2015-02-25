@@ -71,8 +71,9 @@ void ApplyCornerMask::apply_mask() {
         int npt[] = { 4 };
 
         cv::fillPoly(mask, ppt, npt, 1, cv::Scalar(255,255,255), 8);
-        cv::Mat new_img;
+        cv::Mat new_img, new_gray, alpha;
         img.copyTo(new_img, mask);
+
 
         out_img.write(new_img);
     }
