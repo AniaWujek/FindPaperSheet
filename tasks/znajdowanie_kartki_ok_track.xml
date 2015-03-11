@@ -87,8 +87,15 @@
                 <Component name="CameraInfoFaster" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-					<param name="camera_matrix">1299.351750 0.000000 650.629886 ; 0.000000 1292.515181 532.876867 ; 0.000000 0.000000 1.000000</param>
-					<param name="dist_coeffs">-0.420177 0.261718 0.002704 0.000718 0.000000</param>
+					<param name="camera_matrix">1266.700835972148 0 628.9310443363877; 0 1270.663425047366 530.2623887808071; 0 0 1</param>
+					<param name="dist_coeffs">-0.4137733870257686 0.2550783987056959 0.001628115218558177 0.00520574144053067 0</param>
+				</Component>
+				
+				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="2">
+					<param name="width">1296</param>
+					<param name="height">1032</param>
+					<param name="camera_matrix">1128.689208984375 0 632.1636431955703; 0 1180.792602539062 533.2235057606595; 0 0 1</param>
+					<param name="dist_coeffs">0 0 0 0 0.000000</param>
 				</Component>
 
 		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="12">
@@ -223,7 +230,7 @@
             <sink>Displayer.in_img2</sink>
         </Source>
 
-        <Source name="Calib.out_camera_info">
+        <Source name="CameraInfoFaster2.out_camera_info">
             <sink>SolvePnP.in_camerainfo</sink>
         	<sink>CoordinateSys.in_camera_matrix</sink>
         </Source>
