@@ -27,9 +27,6 @@
 
 
 
-            </Executor>
-
-            <Executor name="Prepare to process" period="1.0">
 
                 <Component name="Thresholding" type="CvBasic:CvThreshold" priority="4">
                     <param name="thresh">100</param>
@@ -39,84 +36,82 @@
 				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5">
             		<param name="type">CV_RGB2GRAY</param>
             	</Component>
-                <Component name="Morphology1" type="CvBasic:CvMorphology" priority="1">
+                <Component name="Morphology1" type="CvBasic:CvMorphology" priority="6">
                     <param name="iterations">3</param>
                     <param name="type">MORPH_OPEN</param>
                 </Component>
-                <Component name="Morphology2" type="CvBasic:CvMorphology" priority="2">
+                <Component name="Morphology2" type="CvBasic:CvMorphology" priority="7">
                     <param name="iterations">3</param>
                     <param name="type">MORPH_CLOSE</param>
                 </Component>
 
-            	<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="3">
+            	<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="8">
             		<param name="kernel.width">3</param>
 					<param name="kernel.height">3</param>
 					<param name="sigma.x">2</param>
 					<param name="sigma.y">2</param>
             	</Component>
 
-		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="4">
+		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="9">
 		        </Component>
-		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="5">
+		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="10">
 		        </Component>
-		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="6">
+		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="11">
                     <param name="threshold">60</param>
 		        </Component>
-		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="7">
+		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="12">
 		        </Component>
 
-		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="8">
+		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="13">
 		        </Component>
 
-		        <Component name="ImproveCorners" type="FindPaperSheet:ImprovedCorners" priority="9">
+		        <Component name="ImproveCorners" type="FindPaperSheet:ImprovedCorners" priority="14">
                     <param name="roisize">50</param>
 		        </Component>
 
-		        <Component name="DrawCorners1" type="EdgeDetection:DrawCorners" priority="10">
+		        <Component name="CornerMask" type="FindPaperSheet:ApplyCornerMask" priority="15">
 		        </Component>
 
-		        <Component name="DrawCorners2" type="EdgeDetection:DrawCorners" priority="11">
+		        <Component name="DrawCorners1" type="EdgeDetection:DrawCorners" priority="16">
+		        </Component>
+
+		        <Component name="DrawCorners2" type="EdgeDetection:DrawCorners" priority="17">
 		        </Component>
 
 
 
-            </Executor>
 
-            <Executor name="Processor" period="0.5">
 
-                <Component name="CameraInfoFaster" type="CvCoreTypes:CameraInfoProvider" priority="2">
+                <Component name="CameraInfoFaster" type="CvCoreTypes:CameraInfoProvider" priority="18">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
 					<param name="camera_matrix">1266.700835972148 0 628.9310443363877; 0 1270.663425047366 530.2623887808071; 0 0 1</param>
 					<param name="dist_coeffs">-0.4137733870257686 0.2550783987056959 0.001628115218558177 0.00520574144053067 0</param>
 				</Component>
-				
-				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="2">
+
+				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="19">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
 					<param name="camera_matrix">1128.689208984375 0 632.1636431955703; 0 1180.792602539062 533.2235057606595; 0 0 1</param>
 					<param name="dist_coeffs">0 0 0 0 0.000000</param>
 				</Component>
 
-		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="12">
+		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="20">
                     <param name="width">0.21</param>
                     <param name="height">0.297</param>
 		        </Component>
 
-		        <Component name="Calib" type="FindPaperSheet:Calib" priority="13">
+
+		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="21">
 		        </Component>
 
-		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="14">
+		        <Component name="CoordinateSys" type="FindPaperSheet:DrawCoordinateSystem" priority="22">
 		        </Component>
 
-		        <Component name="CoordinateSys" type="FindPaperSheet:DrawCoordinateSystem" priority="15">
+		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="23">
 		        </Component>
 
-		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="16">
-		        </Component>
-		        
-		        <Component name="CornerMask" type="FindPaperSheet:ApplyCornerMask" priority="17">
-		        </Component>
+
 
 
 
@@ -142,15 +137,13 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
-        	
-        	
+
+
         </Source>
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
         </Source>
-        <Source name="CameraInfoFaster.out_camera_info">
-        	<sink>Calib.in_camera_info</sink>
-        </Source>
+
         <Source name="Undistort.out_img">
             <sink>Conv2gray.in_img</sink>
             <sink>DrawCorners1.in_img</sink>
@@ -161,7 +154,7 @@
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
             <sink>Displayer.in_img0</sink>
-            
+
         </Source>
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
@@ -195,7 +188,7 @@
             <sink>ImproveCorners.in_corners</sink>
         </Source>
         <Source name="DrawCorners1.out_img">
-            
+
         </Source>
         <Source name="ImproveCorners.out_corners">
             <sink>DrawCorners2.in_corners</sink>
@@ -204,7 +197,7 @@
         </Source>
         <Source name="Model.out_model">
             <sink>SolvePnP.in_object3d</sink>
-            <sink>Calib.in_object3d</sink>
+
         </Source>
         <Source name="DrawCorners2.out_img">
             <sink>Displayer.in_img1</sink>
@@ -238,7 +231,7 @@
         <Source name="SolvePnP.out_matrix_rvec_tvec">
             <sink>proxy.in_data</sink>
         </Source>
-        
+
         <Source name="CornerMask.out_img">
         	<sink>Displayer.in_img3</sink>
         </Source>

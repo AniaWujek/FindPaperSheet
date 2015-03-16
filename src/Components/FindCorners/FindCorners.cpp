@@ -71,11 +71,16 @@ struct myComp {
     bool operator() (cv::Point2f a, cv::Point2f b) {
         //if(abs(a.x - b.x) > 10) return a.x < b.x;
         //else return a.y < b.y;
-        return (a.x*a.x + a.y*a.y) < (b.x*b.x + b.y*b.y);
+        return a.x < b.x;
 
     }
 } myComp;
 
+
+std::vector<cv::Point2f> sortCorners(std::vector<cv::Point2f> c) {
+
+
+}
 
 void FindCorners::FindIntersection() {
     std::vector<cv::Point2f> corners;
@@ -91,7 +96,16 @@ void FindCorners::FindIntersection() {
     }
     if(corners.size() == 4) {
         std::sort(corners.begin(), corners.end(), myComp);
+        float dist01 = (corners[0].x - corners[1].x)*(corners[0].x - corners[1].x) + (corners[0].y - corners[1].y)*(corners[0].y - corners[1].y);
+        float dist02 = (corners[0].x - corners[2].x)*(corners[0].x - corners[2].x) + (corners[0].y - corners[2].y)*(corners[0].y - corners[2].y);
+        if(dist01 > dist02) {
+            cv::Point2f temp = corners[1];
+            corners[1] = corners[2];
+            corners[2] = temp;
+        }
         //std::cout<<corners.size()<<std::endl;
+
+
 
         out_corners.write(corners);
         std::cout<<"\ncorners: "<<corners.size()<<"\n";
