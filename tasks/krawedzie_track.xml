@@ -12,8 +12,7 @@
 					<param name="camera_serial">14180973</param>
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-				</Component>
-				
+				</Component>				
 				
                 <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
@@ -38,6 +37,7 @@
                     <param name="iterations">3</param>
                     <param name="type">MORPH_OPEN</param>
                 </Component>
+                
                 <Component name="Morphology2" type="CvBasic:CvMorphology" priority="7">
                     <param name="iterations">3</param>
                     <param name="type">MORPH_CLOSE</param>
@@ -52,11 +52,14 @@
 
 		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="9">
 		        </Component>
+		        
 		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="10">
 		        </Component>
+		        
 		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="11">
                     <param name="threshold">60</param>
 		        </Component>
+		        
 		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="12">
 		        </Component>
 
@@ -88,7 +91,6 @@
                     <param name="height">0.297</param>
 		        </Component>
 
-
 		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="21">
 		        </Component>
 
@@ -97,28 +99,43 @@
 
 		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="23">
 		        </Component>
-
-
-
-
-
+		        
+		        
+		        <Component name="FindEdgesImage" type="EdgeDetection:FindEdges" priority="24">
+		        </Component>
+		        
+		        <Component name="DrawEdgesImage" type="EdgeDetection:DrawEdges" priority="25">
+		        </Component>
+		        
+		        <Component name="ReduceEdges" type="EdgeDetection:ReduceEdges" priority="26">
+		        </Component>
+		        
+		        <Component name="DrawLinesImage" type="EdgeDetection:DrawLines" priority="27">
+		        </Component>
+		       
+		        
             </Executor>
 
             <Executor name="Displayer" period="0.01">
+            
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">4</param>
-                    <param name="title">old, better, coordinate, corner</param>
+                    <param name="count">6</param>
+                    <param name="title">old, better, coordinate, corner, edges, better_edges</param>
                 </Component>
 
             </Executor>
 
             <Executor name="publisher" period="0.01">
+            
                 <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="1">
                     <param name="ros.topic_name">pnp</param>
                     <param name="mode.loop">1</param>
                 </Component>
+                
             </Executor>
+            
         </Subtask>
+        
     </Subtasks>
 
     <DataStreams>
@@ -136,39 +153,49 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
+            <sink>DrawLinesImage.in_img</sink>
         </Source>
+        
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
             <sink>Displayer.in_img0</sink>
-
         </Source>
+        
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
         </Source>
+        
         <Source name="Morphology2.out_img">
             <sink>GaussianBlur.in_img</sink>
         	<sink>DrawEdges.in_img</sink>
         	<sink>DrawLines.in_img</sink>
         </Source>
+        
         <Source name="Conv2gray.out_img">
         	<sink>Thresholding.in_img</sink>
         	<sink>ImproveCorners.in_img</sink>
         </Source>
+        
         <Source name="GaussianBlur.out_img">
         	<sink>FindEdges.in_img</sink>
         </Source>
+        
         <Source name="FindEdges.out_edges">
         	<sink>DrawEdges.in_edges</sink>
         </Source>
+        
         <Source name="DrawEdges.out_img">
             <sink>Lines.in_img</sink>
         </Source>
+        
         <Source name="Lines.out_linesDrawable">
             <sink>DrawLines.in_lines</sink>
         </Source>
+        
         <Source name="Lines.out_lines">
             <sink>FindCorners.in_lines</sink>
         </Source>
+        
         <Source name="FindCorners.out_corners">
             <sink>DrawCorners1.in_corners</sink>
             <sink>ImproveCorners.in_corners</sink>
@@ -179,10 +206,11 @@
             <sink>Model.in_corners</sink>
             <sink>CornerMask.in_corners</sink>
         </Source>
+        
         <Source name="Model.out_model">
             <sink>SolvePnP.in_object3d</sink>
-
         </Source>
+        
         <Source name="DrawCorners1.out_img">
             <sink>Displayer.in_img1</sink>
         </Source>
@@ -190,19 +218,15 @@
         <Source name="SolvePnP.out_homogMatrix">
             <sink>CoordinateSys.in_homogMatrix</sink>
         </Source>
-        <!-- <Source name="SolvePnP.out_rvec">
-            <sink>CoordinateSys.in_rvec</sink>
-        </Source>
-        <Source name="SolvePnP.out_tvec">
-            <sink>CoordinateSys.in_tvec</sink>
-        </Source>-->
 
         <Source name="CoordinateSys.out_csystem">
             <sink>DrawCoordinate.in_csystem</sink>
         </Source>
+        
         <Source name="CoordinateSys.out_impoints">
             <sink>DrawCoordinate.in_impoints</sink>
         </Source>
+        
         <Source name="DrawCoordinate.out_img">
             <sink>Displayer.in_img2</sink>
         </Source>
@@ -218,10 +242,27 @@
 
         <Source name="CornerMask.out_img">
         	<sink>Displayer.in_img3</sink>
+        	<sink>FindEdgesImage.in_img</sink>
+        	<sink>DrawEdgesImage.in_img</sink>
         </Source>
-
-
-
-
+        
+        <Source name="FindEdgesImage.out_edges">
+        	<sink>DrawEdgesImage.in_edges</sink>
+        	<sink>ReduceEdges.in_edges</sink>
+        </Source>
+        
+        <Source name="DrawEdgesImage.out_img">
+        	<sink>Displayer.in_img4</sink>
+        </Source>
+        
+        <Source name="ReduceEdges.out_linesDrawable">
+        	<sink>DrawLinesImage.in_lines</sink>
+        </Source>
+        
+        <Source name="DrawLinesImage.out_img">
+        	<sink>Displayer.in_img5</sink>
+        </Source>
+        
     </DataStreams>
+    
 </Task>

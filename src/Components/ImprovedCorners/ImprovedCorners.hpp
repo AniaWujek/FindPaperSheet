@@ -74,6 +74,7 @@ protected:
 	// Output data streams
 	Base::DataStreamOut<std::vector<cv::Point2f> > out_corners;
 
+
 	// Handlers
 	Base::EventHandler2 h_improveCorners;
 

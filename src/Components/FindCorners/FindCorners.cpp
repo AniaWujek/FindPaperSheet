@@ -82,6 +82,10 @@ std::vector<cv::Point2f> sortCorners(std::vector<cv::Point2f> c) {
 
 }
 
+float distance(cv::Point2f a, cv::Point2f b) {
+    return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
+}
+
 void FindCorners::FindIntersection() {
     std::vector<cv::Point2f> corners;
     std::vector<cv::Vec4i> lines = in_lines.read();
@@ -96,15 +100,22 @@ void FindCorners::FindIntersection() {
     }
     if(corners.size() == 4) {
         std::sort(corners.begin(), corners.end(), myComp);
-        float dist01 = (corners[0].x - corners[1].x)*(corners[0].x - corners[1].x) + (corners[0].y - corners[1].y)*(corners[0].y - corners[1].y);
+        /*float dist01 = (corners[0].x - corners[1].x)*(corners[0].x - corners[1].x) + (corners[0].y - corners[1].y)*(corners[0].y - corners[1].y);
         float dist02 = (corners[0].x - corners[2].x)*(corners[0].x - corners[2].x) + (corners[0].y - corners[2].y)*(corners[0].y - corners[2].y);
         if(dist01 > dist02) {
             cv::Point2f temp = corners[1];
             corners[1] = corners[2];
             corners[2] = temp;
-        }
+        }*/
         //std::cout<<corners.size()<<std::endl;
 
+        for(int i = 1; i < 3; ++i) {
+            if(distance(corners[0], corners[i]) > distance(corners[0], corners[i+1])) {
+                cv::Point2f temp = corners[i];
+                corners[i] = corners[i+1];
+                corners[i+1] = temp;
+            }
+        }
 
 
         out_corners.write(corners);
