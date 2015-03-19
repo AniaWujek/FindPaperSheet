@@ -33,3 +33,5 @@ ADD_COMPONENT(CvHoughLinesImage)
 
 ADD_COMPONENT(Maska_chwytak)
 
+
+ADD_COMPONENT(Skeleton)
