@@ -100,17 +100,7 @@
 		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="23">
 		        </Component>
 		        
-		        
-		        <Component name="FindEdgesImage" type="EdgeDetection:FindEdges" priority="24">
-		        </Component>
-		        
-		        <Component name="DrawEdgesImage" type="EdgeDetection:DrawEdges" priority="25">
-		        </Component>
-		        
-		        <Component name="ReduceEdges" type="EdgeDetection:ReduceEdges" priority="26">
-		        </Component>
-		        
-		        <Component name="DrawLinesImage" type="EdgeDetection:DrawLines" priority="27">
+		        <Component name="Skeleton" type="FindPaperSheet:Skeleton" priority="24">
 		        </Component>
 		       
 		        
@@ -119,8 +109,8 @@
             <Executor name="Displayer" period="0.01">
             
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
-                    <param name="count">6</param>
-                    <param name="title">old, better, coordinate, corner, edges, better_edges</param>
+                    <param name="count">5</param>
+                    <param name="title">old, better, coordinate, corner, skeleton</param>
                 </Component>
 
             </Executor>
@@ -153,12 +143,13 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
-            <sink>DrawLinesImage.in_img</sink>
+            
         </Source>
         
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
             <sink>Displayer.in_img0</sink>
+            
         </Source>
         
         <Source name="Morphology1.out_img">
@@ -242,26 +233,14 @@
 
         <Source name="CornerMask.out_img">
         	<sink>Displayer.in_img3</sink>
-        	<sink>FindEdgesImage.in_img</sink>
-        	<sink>DrawEdgesImage.in_img</sink>
+        	<sink>Skeleton.in_img</sink>
         </Source>
         
-        <Source name="FindEdgesImage.out_edges">
-        	<sink>DrawEdgesImage.in_edges</sink>
-        	<sink>ReduceEdges.in_edges</sink>
-        </Source>
-        
-        <Source name="DrawEdgesImage.out_img">
+        <Source name="Skeleton.out_img">
         	<sink>Displayer.in_img4</sink>
         </Source>
         
-        <Source name="ReduceEdges.out_linesDrawable">
-        	<sink>DrawLinesImage.in_lines</sink>
-        </Source>
         
-        <Source name="DrawLinesImage.out_img">
-        	<sink>Displayer.in_img5</sink>
-        </Source>
         
     </DataStreams>
     

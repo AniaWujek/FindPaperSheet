@@ -16,7 +16,12 @@ namespace Processors {
 namespace Skeleton {
 
 Skeleton::Skeleton(const std::string & name) :
-		Base::Component(name)  {
+		Base::Component(name),
+		iterations("iterations", 0, "range")  {
+
+		iterations.addConstraint("0");
+        iterations.addConstraint("1000");
+        registerProperty(iterations);
 
 }
 
@@ -51,29 +56,33 @@ bool Skeleton::onStart() {
 	return true;
 }
 
-void Skeleton::makeSkeleton() {
 
+
+void Skeleton::makeSkeleton() {
 
     cv::Mat img = in_img.read().clone();
 
     cv::threshold(img, img, 127, 255, cv::THRESH_BINARY);
+    cv::cvtColor(img,img,CV_RGB2GRAY);
     cv::Mat skel(img.size(), CV_8UC1, cv::Scalar(0));
     cv::Mat temp;
     cv::Mat eroded;
+    cv::bitwise_not ( img, img );
 
-    cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(2, 2));
 
     bool done;
-    do
+    for(int i = 0; i < iterations; ++i)
     {
       cv::erode(img, eroded, element);
       cv::dilate(eroded, temp, element); // temp = open(img)
       cv::subtract(img, temp, temp);
       cv::bitwise_or(skel, temp, skel);
       eroded.copyTo(img);
+    }
 
-      done = (cv::countNonZero(img) == 0);
-    } while (!done);
+
+    out_img.write(img);
 
 
 }

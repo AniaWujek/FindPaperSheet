@@ -1,6 +1,6 @@
 /*!
  * \file
- * \brief 
+ * \brief
  * \author Anna Wujek
  */
 
@@ -23,7 +23,7 @@ namespace Skeleton {
  * \class Skeleton
  * \brief Skeleton processor class.
  *
- * 
+ *
  */
 class Skeleton: public Base::Component {
 public:
@@ -39,7 +39,7 @@ public:
 
 	/*!
 	 * Prepare components interface (register streams and handlers).
-	 * At this point, all properties are already initialized and loaded to 
+	 * At this point, all properties are already initialized and loaded to
 	 * values set in config file.
 	 */
 	void prepareInterface();
@@ -77,8 +77,9 @@ protected:
 	Base::EventHandler2 h_makeSkeleton;
 
 	// Properties
+	Base::Property<int> iterations;
 
-	
+
 	// Handlers
 	void makeSkeleton();
 
