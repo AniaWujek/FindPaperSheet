@@ -11,7 +11,8 @@
                 <Component name="Source" type="ROSProxy:CameraSubscriber" priority="1" bump="0">
 					<param name="image_topic">/camera_t/image_color</param>
 				</Component>
-
+				
+				
                 <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
@@ -25,7 +26,7 @@
 				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="4">
             		<param name="type">CV_RGB2GRAY</param>
             	</Component>
-
+            	
                 <Component name="Thresholding" type="CvBasic:CvThreshold" priority="5">
                     <param name="thresh">100</param>
                     <param name="maxval">255</param>
@@ -35,7 +36,6 @@
                     <param name="iterations">3</param>
                     <param name="type">MORPH_OPEN</param>
                 </Component>
-
                 <Component name="Morphology2" type="CvBasic:CvMorphology" priority="7">
                     <param name="iterations">3</param>
                     <param name="type">MORPH_CLOSE</param>
@@ -50,14 +50,11 @@
 
 		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="9">
 		        </Component>
-
 		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="10">
 		        </Component>
-
 		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="11">
                     <param name="threshold">60</param>
 		        </Component>
-
 		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="12">
 		        </Component>
 
@@ -89,6 +86,7 @@
                     <param name="height">0.297</param>
 		        </Component>
 
+
 		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="21">
 		        </Component>
 
@@ -98,34 +96,6 @@
 		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="23">
 		        </Component>
 
-		        <Component name="ImageConv2gray" type="CvBasic:CvColorConv" priority="24">
-            		<param name="type">CV_RGB2GRAY</param>
-            	</Component>
-
-            	<Component name="ImageThresholding" type="CvBasic:CvThreshold" priority="25">
-                    <param name="thresh">100</param>
-                    <param name="maxval">255</param>
-				</Component>
-
-
-                <Component name="Skeleton" type="FindPaperSheet:Skeleton" priority="26">
-                	<param name="iterations">50</param>
-				</Component>
-
-                <Component name="Morphology3" type="CvBasic:CvMorphology" priority="27">
-                    <param name="iterations">1</param>
-                    <param name="type">MORPH_CLOSE</param>
-                </Component>
-
-				
-
-
-				<Component name="ImageCornerMask" type="FindPaperSheet:ApplyCornerMask" priority="28">
-		        </Component>
-
-				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="5">
-				</Component>
-				
 
 
 
@@ -133,33 +103,27 @@
             </Executor>
 
             <Executor name="Displayer" period="0.01">
-
-                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="-5">
-                    <param name="count">2</param>
-                    <param name="title">mask, contour</param>
+                <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="0">
+                    <param name="count">4</param>
+                    <param name="title">old, better, coordinate, corner</param>
                 </Component>
 
             </Executor>
 
             <Executor name="publisher" period="0.01">
-
                 <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="1">
                     <param name="ros.topic_name">pnp</param>
                     <param name="mode.loop">1</param>
                 </Component>
-
             </Executor>
-
         </Subtask>
-
     </Subtasks>
 
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
-        	
         </Source>
-
+        
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
         </Source>
@@ -170,57 +134,39 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
-
         </Source>
-
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
-            
+            <sink>Displayer.in_img0</sink>
 
         </Source>
-
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
         </Source>
-
         <Source name="Morphology2.out_img">
             <sink>GaussianBlur.in_img</sink>
         	<sink>DrawEdges.in_img</sink>
         	<sink>DrawLines.in_img</sink>
         </Source>
-
         <Source name="Conv2gray.out_img">
         	<sink>Thresholding.in_img</sink>
         	<sink>ImproveCorners.in_img</sink>
         </Source>
-
         <Source name="GaussianBlur.out_img">
         	<sink>FindEdges.in_img</sink>
         </Source>
-
         <Source name="FindEdges.out_edges">
         	<sink>DrawEdges.in_edges</sink>
         </Source>
-
         <Source name="DrawEdges.out_img">
             <sink>Lines.in_img</sink>
-            
         </Source>
-
         <Source name="Lines.out_linesDrawable">
             <sink>DrawLines.in_lines</sink>
         </Source>
-        
-        <Source name="DrawLines.out_img">
-            
-        </Source>
-        
-        
-
         <Source name="Lines.out_lines">
             <sink>FindCorners.in_lines</sink>
         </Source>
-
         <Source name="FindCorners.out_corners">
             <sink>DrawCorners1.in_corners</sink>
             <sink>ImproveCorners.in_corners</sink>
@@ -230,31 +176,33 @@
             <sink>DrawCorners2.in_corners</sink>
             <sink>Model.in_corners</sink>
             <sink>CornerMask.in_corners</sink>
-            <sink>ImageCornerMask.in_corners</sink>
         </Source>
-
         <Source name="Model.out_model">
             <sink>SolvePnP.in_object3d</sink>
-        </Source>
 
+        </Source>
         <Source name="DrawCorners1.out_img">
-			<sink>Displayer.in_img0</sink>
+            <sink>Displayer.in_img1</sink>
         </Source>
 
         <Source name="SolvePnP.out_homogMatrix">
             <sink>CoordinateSys.in_homogMatrix</sink>
         </Source>
+        <!-- <Source name="SolvePnP.out_rvec">
+            <sink>CoordinateSys.in_rvec</sink>
+        </Source>
+        <Source name="SolvePnP.out_tvec">
+            <sink>CoordinateSys.in_tvec</sink>
+        </Source>-->
 
         <Source name="CoordinateSys.out_csystem">
             <sink>DrawCoordinate.in_csystem</sink>
         </Source>
-
         <Source name="CoordinateSys.out_impoints">
             <sink>DrawCoordinate.in_impoints</sink>
         </Source>
-
         <Source name="DrawCoordinate.out_img">
-
+            <sink>Displayer.in_img2</sink>
         </Source>
 
         <Source name="CameraInfoFaster2.out_camera_info">
@@ -267,50 +215,11 @@
         </Source>
 
         <Source name="CornerMask.out_img">
-        	<sink>ImageConv2gray.in_img</sink>
+        	<sink>Displayer.in_img3</sink>
         </Source>
-
-        <Source name="ImageConv2gray.out_img">
-        	<sink>ImageThresholding.in_img</sink>
-        </Source>
-
-        <Source name="ImageThresholding.out_img">
-        	<sink>Skeleton.in_img</sink>
-        	
-        </Source>
-
-        <Source name="Skeleton.out_img">
-        	<sink>Morphology3.in_img</sink>
-        	
-
-        </Source>
-
-        <Source name="Morphology3.out_img">
-        	<sink>ImageCornerMask.in_img</sink>
-        	
-        </Source>
-        
- 
-
-
-
-        <Source name="ImageCornerMask.out_img">
-        	<sink>Contour.in_img</sink>
-        	
-			
-        </Source>
-
-        <Source name="Contour.out_img">
-
-        	<sink>Displayer.in_img1</sink>
-        </Source>
-
-
-
 
 
 
 
     </DataStreams>
-
 </Task>

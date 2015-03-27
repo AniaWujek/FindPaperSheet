@@ -88,6 +88,7 @@ void Skeleton::makeSkeleton() {
       double max;
       cv::minMaxLoc(img, 0, &max);
       done = (max == 0);
+
     }
 
 

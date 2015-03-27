@@ -126,6 +126,8 @@
 				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="5">
 				</Component>
 				
+				
+
 
 
 
@@ -135,8 +137,8 @@
             <Executor name="Displayer" period="0.01">
 
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="-5">
-                    <param name="count">2</param>
-                    <param name="title">mask, contour</param>
+                    <param name="count">3</param>
+                    <param name="title">source, cos, contour</param>
                 </Component>
 
             </Executor>
@@ -157,7 +159,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
-        	
+        	<sink>Displayer.in_img0</sink>
         </Source>
 
         <Source name="CameraInfo.out_camera_info">
@@ -204,18 +206,11 @@
 
         <Source name="DrawEdges.out_img">
             <sink>Lines.in_img</sink>
-            
         </Source>
 
         <Source name="Lines.out_linesDrawable">
             <sink>DrawLines.in_lines</sink>
         </Source>
-        
-        <Source name="DrawLines.out_img">
-            
-        </Source>
-        
-        
 
         <Source name="Lines.out_lines">
             <sink>FindCorners.in_lines</sink>
@@ -238,7 +233,7 @@
         </Source>
 
         <Source name="DrawCorners1.out_img">
-			<sink>Displayer.in_img0</sink>
+			<sink>Displayer.in_img1</sink>
         </Source>
 
         <Source name="SolvePnP.out_homogMatrix">
@@ -301,9 +296,10 @@
         </Source>
 
         <Source name="Contour.out_img">
-
-        	<sink>Displayer.in_img1</sink>
+        	
+        	<sink>Displayer.in_img2</sink>
         </Source>
+        
 
 
 

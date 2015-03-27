@@ -50,6 +50,7 @@
 
     <DataStreams>
         <Source name="Source.out_img">
+        	<sink>Displayer.in_img</sink>
         	<sink>Undistort.in_img</sink>
 
         </Source>
@@ -64,7 +65,7 @@
         </Source>
 
         <Source name="mask.out_img">
-            <sink>Displayer.in_img</sink>
+            
         </Source>
 
 
