@@ -127,6 +127,9 @@
                     <param name="diff1">3</param>
                     <param name="diff2">15</param>
 				</Component>
+				
+				<Component name="HomoPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="5">
+				</Component>
 
 
 
@@ -234,6 +237,7 @@
             <sink>Model.in_corners</sink>
             <sink>CornerMask.in_corners</sink>
             <sink>ImageCornerMask.in_corners</sink>
+            <sink>HomographyPoints.in_corners</sink>
         </Source>
 
         <Source name="Model.out_model">
@@ -308,6 +312,10 @@
         <Source name="Contour.out_img">
 
         	<sink>Displayer.in_img2</sink>
+        </Source>
+        
+        <Source name="Contours.out_contours">
+        	<sink>HomographyPoints.in_points</sink>
         </Source>
 
 

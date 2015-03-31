@@ -35,3 +35,5 @@ ADD_COMPONENT(Maska_chwytak)
 
 
 ADD_COMPONENT(Skeleton)
+
+ADD_COMPONENT(HomographyPoints)

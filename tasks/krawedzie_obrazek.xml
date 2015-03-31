@@ -8,9 +8,11 @@
         <Subtask name="main">
 
             <Executor name="Loader" period="0.1">
-                <Component name="Source" type="ROSProxy:CameraSubscriber" priority="1" bump="0">
-					<param name="image_topic">/camera_t/image_color</param>
-				</Component>
+                <Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
+                    <param name="sequence.directory">%[TASK_LOCATION]%/../data/</param>
+                    <param name="sequence.pattern">.*\.png</param>
+                    <param name="mode.loop">1</param>
+                </Component>
 
                 <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
 					<param name="width">1296</param>
