@@ -112,6 +112,7 @@
                 	<param name="iterations">20</param>
 				</Component>
 
+
                 <Component name="Morphology3" type="CvBasic:CvMorphology" priority="27">
                     <param name="iterations">1</param>
                     <param name="type">MORPH_CLOSE</param>
@@ -124,11 +125,11 @@
 		        </Component>
 
 				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="5">
-                    <param name="diff1">3</param>
-                    <param name="diff2">15</param>
+                    <param name="diff1">10</param>
+                    <param name="diff2">25</param>
 				</Component>
 				
-				<Component name="HomoPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="5">
+				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="5">
 				</Component>
 
 
@@ -150,6 +151,11 @@
 
                 <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="1">
                     <param name="ros.topic_name">pnp</param>
+                    <param name="mode.loop">1</param>
+                </Component>
+                
+                <Component name="proxyPoints" type="ROSProxy:Float32MultiArrayProxy" priority="2">
+                    <param name="ros.topic_name">points</param>
                     <param name="mode.loop">1</param>
                 </Component>
 
@@ -314,8 +320,12 @@
         	<sink>Displayer.in_img2</sink>
         </Source>
         
-        <Source name="Contours.out_contours">
+        <Source name="Contour.out_contours">
         	<sink>HomographyPoints.in_points</sink>
+        </Source>
+        
+        <Source name="HomographyPoints.out_points">
+            <sink>proxyPoints.in_data</sink>
         </Source>
 
 

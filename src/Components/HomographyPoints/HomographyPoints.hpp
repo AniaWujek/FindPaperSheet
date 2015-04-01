@@ -72,7 +72,7 @@ protected:
 	Base::DataStreamIn<std::vector<std::vector<cv::Point> > > in_points;
 
 	// Output data streams
-	Base::DataStreamOut<std::vector<std::vector<cv::Point> > > out_points;
+	Base::DataStreamOut<std::vector<float> > out_points;
 
 	// Handlers
 

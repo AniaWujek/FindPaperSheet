@@ -60,6 +60,7 @@ void HomographyPoints::findHomography_proc() {
 
     std::vector<cv::Point2f> corners = in_corners.read();
     std::vector<std::vector<cv::Point> > points = in_points.read();
+    std::vector<float> proxyPoints;
 
     std::vector<cv::Point2f> good_corners;
     good_corners.push_back(cv::Point2f(0,0));
@@ -69,8 +70,32 @@ void HomographyPoints::findHomography_proc() {
 
     if(corners.size() == 4) {
         cv::Mat homoMatrix = cv::findHomography(corners, good_corners, 0, 3, cv::noArray());
-        CLOG(LNOTICE) << "Homohomohomo "<< homoMatrix;
+        //CLOG(LNOTICE) << "Homohomohomo "<< homoMatrix;
+        cv::Mat temp;
+
+
+        for(int i = 0; i < points.size(); ++i) {
+
+            proxyPoints.push_back((float)points[i].size());
+
+            for(int j = 0; j < points[i].size(); ++j) {
+                temp = (cv::Mat_<double>(3, 1) <<
+			            points[i][j].x,
+				        points[i][j].y,
+			            1);
+                temp = homoMatrix * temp;
+                proxyPoints.push_back(temp.at<double>(0,0));
+                proxyPoints.push_back(temp.at<double>(1,0));
+                suma++;
+
+            }
+
+        }
+
+        out_points.write(proxyPoints);
+
     }
+
 
 
 }
