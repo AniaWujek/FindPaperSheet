@@ -73,7 +73,7 @@ void HomographyPoints::findHomography_proc() {
         //CLOG(LNOTICE) << "Homohomohomo "<< homoMatrix;
         cv::Mat temp;
 
-
+        proxyPoints.push_back((float)points.size());
         for(int i = 0; i < points.size(); ++i) {
 
             proxyPoints.push_back((float)points[i].size());
@@ -86,7 +86,7 @@ void HomographyPoints::findHomography_proc() {
                 temp = homoMatrix * temp;
                 proxyPoints.push_back(temp.at<double>(0,0));
                 proxyPoints.push_back(temp.at<double>(1,0));
-                suma++;
+
 
             }
 
