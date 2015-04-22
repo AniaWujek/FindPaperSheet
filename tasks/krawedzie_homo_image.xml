@@ -127,8 +127,8 @@
 		        </Component>
 
 				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="5">
-                    <param name="diff1">10</param>
-                    <param name="diff2">25</param>
+                    <param name="diff1">2</param>
+                    <param name="diff2">15</param>
 				</Component>
 				
 				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="5">
@@ -183,7 +183,7 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
-			<sink>Displayer.in_img0</sink>
+			
         </Source>
 
         <Source name="Thresholding.out_img">
@@ -252,8 +252,8 @@
             <sink>SolvePnP.in_object3d</sink>
         </Source>
 
-        <Source name="DrawCorners1.out_img">
-
+        <Source name="DrawCorners2.out_img">
+		<sink>Displayer.in_img0</sink>
         </Source>
 
         <Source name="SolvePnP.out_homogMatrix">
