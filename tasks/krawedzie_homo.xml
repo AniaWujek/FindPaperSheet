@@ -7,7 +7,7 @@
     <Subtasks>
         <Subtask name="main">
 
-            <Executor name="Loader" period="1.0">
+            <Executor name="Loader" period="0.5">
                 <Component name="Source" type="ROSProxy:CameraSubscriber" priority="1" bump="0">
 					<param name="image_topic">/camera_t/image_color</param>
 				</Component>
@@ -19,10 +19,10 @@
 					<param name="dist_coeffs">-0.420177 0.261718 0.002704 0.000718 0.000000</param>
 				</Component>
 
-				<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
-				</Component>
+		<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
+		</Component>
 
-				<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="4">
+		<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="4">
             		<param name="type">CV_RGB2GRAY</param>
             	</Component>
 
@@ -124,13 +124,23 @@
 				<Component name="ImageCornerMask" type="FindPaperSheet:ApplyCornerMask" priority="28">
 		        </Component>
 
-				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="5">
+				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="0">
                     <param name="diff1">2</param>
                     <param name="diff2">15</param>
 				</Component>
 				
-				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="5">
+				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="0">
 				</Component>
+				
+				<Component name="proxyPoints" type="ROSProxy:Float32MultiArrayProxy" priority="31">
+                    <param name="ros.topic_name">points</param>
+                    <param name="mode.loop">1</param>
+                </Component>
+		
+                <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="32">
+                    <param name="ros.topic_name">pnp</param>
+                    <param name="mode.loop">1</param>
+                </Component>
 
 
 
@@ -141,23 +151,17 @@
             <Executor name="Displayer" period="0.01">
 
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="-5">
-                    <param name="count">3</param>
-                    <param name="title">0, 1, 2</param>
+                    <param name="count">2</param>
+                    <param name="title">1, 2</param>
                 </Component>
 
             </Executor>
 
-            <Executor name="publisher" period="0.01">
+            <Executor name="publisher" period="0.1">
 
-                <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="1">
-                    <param name="ros.topic_name">pnp</param>
-                    <param name="mode.loop">1</param>
-                </Component>
+		
                 
-                <Component name="proxyPoints" type="ROSProxy:Float32MultiArrayProxy" priority="2">
-                    <param name="ros.topic_name">points</param>
-                    <param name="mode.loop">1</param>
-                </Component>
+                
 
             </Executor>
 
@@ -182,6 +186,8 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
+	    
+	    
 			
         </Source>
 
@@ -225,7 +231,7 @@
         </Source>
 
         <Source name="DrawLines.out_img">
-
+		
         </Source>
 
 
@@ -268,12 +274,12 @@
         </Source>
 
         <Source name="DrawCoordinate.out_img">
-		<sink>Displayer.in_img0</sink>
+		
         </Source>
 
         <Source name="CameraInfoFaster2.out_camera_info">
             <sink>SolvePnP.in_camerainfo</sink>
-        	<sink>CoordinateSys.in_camera_matrix</sink>
+		<sink>CoordinateSys.in_camera_matrix</sink>
         </Source>
 
         <Source name="SolvePnP.out_matrix_rvec_tvec">
@@ -282,6 +288,7 @@
 
         <Source name="CornerMask.out_img">
         	<sink>ImageConv2gray.in_img</sink>
+		
         </Source>
 
         <Source name="ImageConv2gray.out_img">
@@ -291,7 +298,8 @@
 
         <Source name="ImageThresholding.out_img">
         	<sink>Skeleton.in_img</sink>
-
+		<sink>Displayer.in_img0</sink>
+		
 
         </Source>
 
@@ -312,13 +320,12 @@
 
         <Source name="ImageCornerMask.out_img">
         	<sink>Contour.in_img</sink>
-            <sink>Displayer.in_img1</sink>
+       
 
         </Source>
 
         <Source name="Contour.out_img">
-
-        	<sink>Displayer.in_img2</sink>
+		<sink>Displayer.in_img1</sink>
         </Source>
         
         <Source name="Contour.out_contours">

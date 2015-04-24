@@ -68,8 +68,8 @@ protected:
 
 
 	// Input data streams
-	Base::DataStreamIn<std::vector<cv::Point2f> > in_corners;
-	Base::DataStreamIn<cv::Mat> in_img;
+	Base::DataStreamIn<std::vector<cv::Point2f>, Base::DataStreamBuffer::Newest, Base::Synchronization::Mutex > in_corners;
+	Base::DataStreamIn<cv::Mat, Base::DataStreamBuffer::Newest, Base::Synchronization::Mutex> in_img;
 
 	// Output data streams
 	Base::DataStreamOut<cv::Mat> out_img;
