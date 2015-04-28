@@ -127,9 +127,10 @@
 		        </Component>
 
 				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="0">
-                    <param name="diff1">2</param>
-                    <param name="diff2">15</param>
+					<param name="diff1">2</param>
+					<param name="diff2">10</param>
 				</Component>
+
 				
 				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="0">
 				</Component>
@@ -300,20 +301,20 @@
 
         <Source name="ImageThresholding.out_img">
         	<sink>Skeleton.in_img</sink>
-		<sink>Displayer.in_img0</sink>
+		
 		
 
         </Source>
 
         <Source name="Skeleton.out_img">
         	<sink>Morphology3.in_img</sink>
-
+		
 
         </Source>
 
         <Source name="Morphology3.out_img">
         	<sink>ImageCornerMask.in_img</sink>
-
+		
         </Source>
 
 
@@ -322,11 +323,12 @@
 
         <Source name="ImageCornerMask.out_img">
         	<sink>Contour.in_img</sink>
-       
+		<sink>Displayer.in_img0</sink>
 
         </Source>
 
-        <Source name="Contour.out_img">
+	
+	<Source name="Contour.out_img">
 		<sink>Displayer.in_img1</sink>
         </Source>
         
