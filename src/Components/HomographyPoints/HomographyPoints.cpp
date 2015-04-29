@@ -94,6 +94,7 @@ void HomographyPoints::findHomography_proc() {
 
         out_points.write(proxyPoints);
 
+
     }
 
 

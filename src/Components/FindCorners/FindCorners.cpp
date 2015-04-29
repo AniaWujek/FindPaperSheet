@@ -119,7 +119,7 @@ void FindCorners::FindIntersection() {
 
 
         out_corners.write(corners);
-        std::cout<<"\ncorners: "<<corners.size()<<"\n";
+//        std::cout<<"\ncorners: "<<corners.size()<<"\n";
     }
 
 

@@ -159,12 +159,12 @@ void CvSolvePnP_Processor::onNewObject3D()
 		}
 	}
 	CLOG(LDEBUG) << "HomogMatrix:\n" << ss.str() << endl;
-    for(int i =0; i < 3; ++i) {
-        for(int j = 0; j < 4; j++) {
-                std::cout<<hm.elements[i][j]<<" ";
-            }
-        std::cout<<std::endl;
-    }
+//    for(int i =0; i < 3; ++i) {
+//        for(int j = 0; j < 4; j++) {
+//                std::cout<<hm.elements[i][j]<<" ";
+//            }
+//        std::cout<<std::endl;
+//    }
 
 	out_rvec.write(rvec.clone());
 	out_tvec.write(tvec.clone());
