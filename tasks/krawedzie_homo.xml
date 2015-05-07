@@ -172,7 +172,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
-		<sink>Displayer.in_img0</sink>
+		
 		
 
         </Source>
@@ -275,7 +275,7 @@
         </Source>
 
         <Source name="DrawCoordinate.out_img">
-		
+		<sink>Displayer.in_img0</sink>
         </Source>
 
         <Source name="CameraInfoFaster2.out_camera_info">
