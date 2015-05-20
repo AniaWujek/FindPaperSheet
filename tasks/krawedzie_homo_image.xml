@@ -13,109 +13,111 @@
                     <param name="sequence.pattern">.*\.png</param>
                     <param name="mode.loop">1</param>
                 </Component>
+		
 
-                <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2">
+                <Component name="CameraInfo" type="CvCoreTypes:CameraInfoProvider" priority="2" bump="-5">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
 					<param name="camera_matrix">1299.351750 0.000000 650.629886 ; 0.000000 1292.515181 532.876867 ; 0.000000 0.000000 1.000000</param>
 					<param name="dist_coeffs">-0.420177 0.261718 0.002704 0.000718 0.000000</param>
 				</Component>
-
-		<Component name="Undistort" type="CvBasic:CvUndistort" priority="3">
-		</Component>
-
-		<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="4">
-            		<param name="type">CV_RGB2GRAY</param>
-            	</Component>
-
-                <Component name="Thresholding" type="CvBasic:CvThreshold" priority="5">
-                    <param name="thresh">100</param>
-                    <param name="maxval">255</param>
-				</Component>
-
-                <Component name="Morphology1" type="CvBasic:CvMorphology" priority="6">
-                    <param name="iterations">3</param>
-                    <param name="type">MORPH_OPEN</param>
-                </Component>
-
-                <Component name="Morphology2" type="CvBasic:CvMorphology" priority="7">
-                    <param name="iterations">3</param>
-                    <param name="type">MORPH_CLOSE</param>
-                </Component>
-
-            	<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="8">
+		<Component name="GaussianBlur" type="CvBasic:CvGaussianBlur" priority="3" bump="-5">
             		<param name="kernel.width">3</param>
 					<param name="kernel.height">3</param>
 					<param name="sigma.x">2</param>
 					<param name="sigma.y">2</param>
             	</Component>
 
-		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="9">
+		<Component name="Undistort" type="CvBasic:CvUndistort" priority="4" bump="-5">
+		</Component>
+
+		<Component name="Conv2gray" type="CvBasic:CvColorConv" priority="5" bump="-5">
+            		<param name="type">CV_RGB2GRAY</param>
+            	</Component>
+
+                <Component name="Thresholding" type="CvBasic:CvThreshold" priority="6" bump="-5">
+                    <param name="thresh">100</param>
+                    <param name="maxval">255</param>
+				</Component>
+
+                <Component name="Morphology1" type="CvBasic:CvMorphology" priority="7" bump="-5">
+                    <param name="iterations">3</param>
+                    <param name="type">MORPH_OPEN</param>
+                </Component>
+
+                <Component name="Morphology2" type="CvBasic:CvMorphology" priority="8" bump="-5">
+                    <param name="iterations">3</param>
+                    <param name="type">MORPH_CLOSE</param>
+                </Component>
+
+            	
+
+		        <Component name="FindEdges" type="EdgeDetection:FindEdges" priority="9" bump="-5">
 		        </Component>
 
-		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="10">
+		        <Component name="DrawEdges" type="EdgeDetection:DrawEdges" priority="10" bump="-5">
 		        </Component>
 
-		        <Component name="Lines" type="FindPaperSheet:CvHoughLines" priority="11">
+		        <Component name="Lines" type="CvBasic:CvHoughLines" priority="11" bump="-5">
                     <param name="threshold">60</param>
 		        </Component>
 
-		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="12">
+		        <Component name="DrawLines" type="EdgeDetection:DrawLines" priority="12" bump="-5">
 		        </Component>
 
-		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="13">
+		        <Component name="FindCorners" type="FindPaperSheet:FindCorners" priority="13" bump="-5">
 		        </Component>
 
-		        <Component name="ImproveCorners" type="FindPaperSheet:ImprovedCorners" priority="14">
+		        <Component name="ImproveCorners" type="FindPaperSheet:ImprovedCorners" priority="14" bump="-5">
                     <param name="roisize">50</param>
 		        </Component>
 
-		        <Component name="CornerMask" type="FindPaperSheet:ApplyCornerMask" priority="15">
+		        <Component name="CornerMask" type="FindPaperSheet:ApplyCornerMask" priority="15" bump="-5">
 		        </Component>
 
-		        <Component name="DrawCorners1" type="EdgeDetection:DrawCorners" priority="16">
+		        <Component name="DrawCorners1" type="EdgeDetection:DrawCorners" priority="16" bump="-5">
 		        </Component>
 
-		        <Component name="DrawCorners2" type="EdgeDetection:DrawCorners" priority="17">
+		        <Component name="DrawCorners2" type="EdgeDetection:DrawCorners" priority="17" bump="-5">
 		        </Component>
 
-				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="19">
+				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="19" bump="-5">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
 					<param name="camera_matrix">1128.689208984375 0 632.1636431955703; 0 1180.792602539062 533.2235057606595; 0 0 1</param>
 					<param name="dist_coeffs">0 0 0 0 0.000000</param>
 				</Component>
 
-		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="20">
+		        <Component name="Model" type="FindPaperSheet:Create3DModel" priority="20" bump="-5">
                     <param name="width">0.21</param>
                     <param name="height">0.297</param>
 		        </Component>
 
-		        <Component name="SolvePnP" type="FindPaperSheet:CvSolvePnP" priority="21">
+		        <Component name="SolvePnP" type="CvBasic:CvSolvePnP" priority="21" bump="-5">
 		        </Component>
 
-		        <Component name="CoordinateSys" type="FindPaperSheet:DrawCoordinateSystem" priority="22">
+		        <Component name="CoordinateSys" type="CvBasic:DrawCoordinateSystem" priority="22" bump="-5">
 		        </Component>
 
-		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="23">
+		        <Component name="DrawCoordinate" type="EdgeDetection:DrawSystem" priority="23" bump="-5">
 		        </Component>
 
-		        <Component name="ImageConv2gray" type="CvBasic:CvColorConv" priority="24">
+		        <Component name="ImageConv2gray" type="CvBasic:CvColorConv" priority="24" bump="-5">
             		<param name="type">CV_RGB2GRAY</param>
             	</Component>
 
-            	<Component name="ImageThresholding" type="CvBasic:CvThreshold" priority="25">
+            	<Component name="ImageThresholding" type="CvBasic:CvThreshold" priority="25" bump="-5">
                     <param name="thresh">130</param>
                     <param name="maxval">255</param>
 				</Component>
 
 
-                <Component name="Skeleton" type="FindPaperSheet:Skeleton" priority="26">
+                <Component name="Skeleton" type="FindPaperSheet:Skeleton" priority="26" bump="-5">
                 	<param name="iterations">20</param>
 				</Component>
 
 
-                <Component name="Morphology3" type="CvBasic:CvMorphology" priority="27">
+                <Component name="Morphology3" type="CvBasic:CvMorphology" priority="27" bump="-5">
                     <param name="iterations">1</param>
                     <param name="type">MORPH_CLOSE</param>
                 </Component>
@@ -123,24 +125,23 @@
 
 
 
-				<Component name="ImageCornerMask" type="FindPaperSheet:ApplyCornerMask" priority="28">
+				<Component name="ImageCornerMask" type="FindPaperSheet:ApplyCornerMask" priority="28" bump="-5">
 		        </Component>
 
-				<Component name="Contour" type="CvBasic:CvContour" priority="29" bump="0">
-					<param name="diff1">2</param>
-					<param name="diff2">10</param>
-				</Component>
-
-				
-				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30" bump="0">
+				<Component name="Contour" type="CvBasic:CvContour" priority="29"  bump="-5">
+                    <param name="diff1">2</param>
+                    <param name="diff2">15</param>
 				</Component>
 				
-				<Component name="proxyPoints" type="ROSProxy:Float32MultiArrayProxy" priority="31">
+				<Component name="HomographyPoints" type="FindPaperSheet:HomographyPoints" priority="30"  bump="-5">
+				</Component>
+				
+				<Component name="proxyPoints" type="ROSProxy:Float32MultiArrayProxy" priority="31" bump="5">
                     <param name="ros.topic_name">points</param>
                     <param name="mode.loop">1</param>
                 </Component>
 		
-                <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="32">
+                <Component name="proxy" type="ROSProxy:Float32MultiArrayProxy" priority="32" bump="-5">
                     <param name="ros.topic_name">pnp</param>
                     <param name="mode.loop">1</param>
                 </Component>
@@ -174,13 +175,17 @@
 
     <DataStreams>
         <Source name="Source.out_img">
-        	<sink>Undistort.in_img</sink>
+        	<sink>GaussianBlur.in_img</sink>
 		
-
         </Source>
 
         <Source name="CameraInfo.out_camera_info">
         	<sink>Undistort.in_camera_info</sink>
+        </Source>
+	
+	<Source name="GaussianBlur.out_img">
+        	<sink>Undistort.in_img</sink>
+		
         </Source>
 
         <Source name="Undistort.out_img">
@@ -189,36 +194,31 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
+	</Source>
 	    
 	    
-			
+	    <Source name="Conv2gray.out_img">
+        	<sink>Thresholding.in_img</sink>
+        	<sink>ImproveCorners.in_img</sink>			
         </Source>
 
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
-
-
-        </Source>
+	</Source>
 
         <Source name="Morphology1.out_img">
             <sink>Morphology2.in_img</sink>
         </Source>
 
         <Source name="Morphology2.out_img">
-            <sink>GaussianBlur.in_img</sink>
+            <sink>FindEdges.in_img</sink>
         	<sink>DrawEdges.in_img</sink>
         	<sink>DrawLines.in_img</sink>
         </Source>
 
-        <Source name="Conv2gray.out_img">
-        	<sink>Thresholding.in_img</sink>
-        	<sink>ImproveCorners.in_img</sink>
+        
 
-        </Source>
-
-        <Source name="GaussianBlur.out_img">
-        	<sink>FindEdges.in_img</sink>
-        </Source>
+        
 
         <Source name="FindEdges.out_edges">
         	<sink>DrawEdges.in_edges</sink>
@@ -308,13 +308,13 @@
 
         <Source name="Skeleton.out_img">
         	<sink>Morphology3.in_img</sink>
-		
+
 
         </Source>
 
         <Source name="Morphology3.out_img">
         	<sink>ImageCornerMask.in_img</sink>
-		
+
         </Source>
 
 
@@ -323,12 +323,11 @@
 
         <Source name="ImageCornerMask.out_img">
         	<sink>Contour.in_img</sink>
-		<sink>Displayer.in_img0</sink>
+       
 
         </Source>
 
-	
-	<Source name="Contour.out_img">
+        <Source name="Contour.out_img">
 		<sink>Displayer.in_img1</sink>
         </Source>
         
