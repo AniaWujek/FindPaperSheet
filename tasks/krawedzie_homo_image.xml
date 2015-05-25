@@ -84,7 +84,7 @@
 				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="19" bump="-5">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-					<param name="camera_matrix">1128.689208984375 0 632.1636431955703; 0 1180.792602539062 533.2235057606595; 0 0 1</param>
+					<param name="camera_matrix">1299.351750 0.000000 650.629886 ; 0.000000 1292.515181 532.876867 ; 0.000000 0.000000 1.000000</param>
 					<param name="dist_coeffs">0 0 0 0 0.000000</param>
 				</Component>
 
@@ -155,8 +155,8 @@
             <Executor name="Displayer" period="0.01">
 
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="-5">
-                    <param name="count">2</param>
-                    <param name="title">1, 2</param>
+                    <param name="count">10</param>
+                    <param name="title">source, undistort, conv2gray, thresh, edges, lines, corners, image thresh, skeleton, coordinate system</param>
                 </Component>
 
             </Executor>
@@ -176,6 +176,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>GaussianBlur.in_img</sink>
+		<sink>Displayer.in_img0</sink>
 		
         </Source>
 
@@ -186,6 +187,7 @@
 	<Source name="GaussianBlur.out_img">
         	<sink>Undistort.in_img</sink>
 		
+		
         </Source>
 
         <Source name="Undistort.out_img">
@@ -194,16 +196,20 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
+	    <sink>Displayer.in_img1</sink>
+	    <sink>DrawCoordinate.in_img</sink>
 	</Source>
 	    
 	    
 	    <Source name="Conv2gray.out_img">
         	<sink>Thresholding.in_img</sink>
-        	<sink>ImproveCorners.in_img</sink>			
+        	<sink>ImproveCorners.in_img</sink>
+		<sink>Displayer.in_img2</sink>			
         </Source>
 
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
+	    <sink>Displayer.in_img3</sink>
 	</Source>
 
         <Source name="Morphology1.out_img">
@@ -226,6 +232,7 @@
 
         <Source name="DrawEdges.out_img">
             <sink>Lines.in_img</sink>
+	    <sink>Displayer.in_img4</sink>
 
         </Source>
 
@@ -234,6 +241,7 @@
         </Source>
 
         <Source name="DrawLines.out_img">
+		<sink>Displayer.in_img5</sink>
 		
         </Source>
 
@@ -261,7 +269,7 @@
         </Source>
 
         <Source name="DrawCorners2.out_img">
-		
+		<sink>Displayer.in_img6</sink>
         </Source>
 
         <Source name="SolvePnP.out_homogMatrix">
@@ -277,11 +285,11 @@
         </Source>
 
         <Source name="DrawCoordinate.out_img">
-		
+		<sink>Displayer.in_img9</sink>
         </Source>
 
         <Source name="CameraInfoFaster2.out_camera_info">
-            <sink>SolvePnP.in_camerainfo</sink>
+		<sink>SolvePnP.in_camerainfo</sink>
 		<sink>CoordinateSys.in_camera_matrix</sink>
         </Source>
 
@@ -301,6 +309,7 @@
 
         <Source name="ImageThresholding.out_img">
         	<sink>Skeleton.in_img</sink>
+		<sink>Displayer.in_img7</sink>
 		
 		
 
@@ -308,6 +317,7 @@
 
         <Source name="Skeleton.out_img">
         	<sink>Morphology3.in_img</sink>
+		<sink>Displayer.in_img8</sink>
 
 
         </Source>
@@ -328,7 +338,7 @@
         </Source>
 
         <Source name="Contour.out_img">
-		<sink>Displayer.in_img1</sink>
+		
         </Source>
         
         <Source name="Contour.out_contours">
