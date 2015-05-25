@@ -114,7 +114,7 @@ void Skeleton::makeSkeleton() {
 
     }
 
-
+    cv::bitwise_not ( skel, skel );
     out_img.write(skel);
 
 
