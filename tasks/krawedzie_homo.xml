@@ -80,7 +80,7 @@
 				<Component name="CameraInfoFaster2" type="CvCoreTypes:CameraInfoProvider" priority="19" bump="-5">
 					<param name="width">1296</param>
 					<param name="height">1032</param>
-					<param name="camera_matrix">1128.689208984375 0 632.1636431955703; 0 1180.792602539062 533.2235057606595; 0 0 1</param>
+					<param name="camera_matrix">1299.351750 0.000000 650.629886 ; 0.000000 1292.515181 532.876867 ; 0.000000 0.000000 1.000000</param>
 					<param name="dist_coeffs">0 0 0 0 0.000000</param>
 				</Component>
 
@@ -151,8 +151,8 @@
             <Executor name="Displayer" period="0.01">
 
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="-5">
-                    <param name="count">2</param>
-                    <param name="title">1, 2</param>
+                    <param name="count">3</param>
+                    <param name="title">1, 2, 3</param>
                 </Component>
 
             </Executor>
@@ -172,7 +172,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>Undistort.in_img</sink>
-		
+		<sink>Displayer.in_img2</sink>
 		
 
         </Source>
