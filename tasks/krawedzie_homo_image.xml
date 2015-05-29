@@ -159,7 +159,7 @@
 
                 <Component name="Displayer" type="CvBasic:CvWindow" priority="1" bump="-5">
                     <param name="count">10</param>
-                    <param name="title">source, undistort, conv2gray, morph, edges, lines, corners, skeleton, contour, coordinate system</param>
+                    <param name="title">thresh, image_thresh, conv2gray, morph, edges, lines, corners, skeleton, contour, coordinate system</param>
                 </Component>
 
             </Executor>
@@ -179,7 +179,7 @@
     <DataStreams>
         <Source name="Source.out_img">
         	<sink>GaussianBlur.in_img</sink>
-		<sink>Displayer.in_img0</sink>
+
 
         </Source>
 
@@ -199,7 +199,7 @@
             <sink>DrawCorners2.in_img</sink>
             <sink>DrawCoordinate.in_img</sink>
             <sink>CornerMask.in_img</sink>
-	    <sink>Displayer.in_img1</sink>
+
 	    <sink>DrawCoordinate.in_img</sink>
 	</Source>
 
@@ -212,6 +212,7 @@
 
         <Source name="Thresholding.out_img">
             <sink>Morphology1.in_img</sink>
+            <sink>Displayer.in_img0</sink>
 
 	</Source>
 
@@ -313,6 +314,7 @@
 
         <Source name="ImageThresholding.out_img">
         	<sink>Skeleton.in_img</sink>
+        	<sink>Displayer.in_img1</sink>
 
 
 

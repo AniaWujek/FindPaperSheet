@@ -117,6 +117,16 @@ void FindCorners::FindIntersection() {
             }
         }
 
+        if(corners[0].y > corners[1].y) {
+
+            cv::Point2f temp0 = corners[0];
+            cv::Point2f temp2 = corners[2];
+            corners[0] = corners[1];
+            corners[2] = corners[3];
+            corners[1] = temp0;
+            corners[3] = temp2;
+        }
+
 
         out_corners.write(corners);
 //        std::cout<<"\ncorners: "<<corners.size()<<"\n";
